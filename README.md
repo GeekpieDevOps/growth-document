@@ -1,1 +1,0 @@
-# Shanghaitech Growth Documents
