@@ -20,7 +20,7 @@ func TestHelloWorld(t *testing.T) {
 		c.JSON(200, gin.H{"message": "Hello, World!"})
 	})
 
-	// 创建一个 POST 请求
+	// 创建一个 GET 请求
 	req, err := http.NewRequest("GET", "/", nil)
 	if err != nil {
 		t.Fatalf("Failed to create request: %v", err)
