@@ -39,7 +39,7 @@ func main() {
 	// 设置路由
 
 	// Hello World HTTP Endpoint -> JSON
-	r.GET("/", func(c *gin.Context) {
+	r.GET("/helloworld", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Hello, World!",
 		})
