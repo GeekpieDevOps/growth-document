@@ -21,7 +21,7 @@ func TestHelloWorld(t *testing.T) {
 	})
 
 	// 创建一个 GET 请求
-	req, err := http.NewRequest("GET", "/", nil)
+	req, err := http.NewRequest("GET", "/helloworld", nil)
 	if err != nil {
 		t.Fatalf("Failed to create request: %v", err)
 	}
