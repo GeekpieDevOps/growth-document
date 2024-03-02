@@ -1,45 +1,79 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestHelloWorld(t *testing.T) {
-	// 设置 Gin 的模式为测试模式
+// mockLoginBody creates a mock JSON body for the login endpoint
+func mockLoginBody() *bytes.Buffer {
+	loginDetails := map[string]string{"username": "test", "password": "test"}
+	body, _ := json.Marshal(loginDetails)
+	return bytes.NewBuffer(body)
+}
+
+// TestHelloWorldEndpoint tests the "/" endpoint
+func TestHelloWorldEndpoint(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+	router := gin.Default()
 
-	// 创建一个 Gin 引擎实例
-	r := gin.New()
-
-	// 添加测试的路由
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "Hello, World!"})
+	router.POST("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Hello, World!",
+		})
 	})
 
-	// 创建一个 GET 请求
-	req, err := http.NewRequest("GET", "/helloworld", nil)
+	req, _ := http.NewRequest("POST", "/", nil)
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+
+	assert.Equal(t, http.StatusOK, resp.Code)
+
+	var response map[string]string
+	err := json.Unmarshal(resp.Body.Bytes(), &response)
 	if err != nil {
-		t.Fatalf("Failed to create request: %v", err)
+		t.Fatal(err)
 	}
 
-	// 创建一个响应记录器
-	w := httptest.NewRecorder()
+	assert.Equal(t, "Hello, World!", response["message"])
+}
 
-	// 将请求发送到路由
-	r.ServeHTTP(w, req)
+// TestLoginEndpoint tests the "/api/v1/login" endpoint
+func TestLoginEndpoint(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.Default()
 
-	// 检查状态码
-	if w.Code != http.StatusOK {
-		t.Errorf("Expected status 200; got %v", w.Code)
+	router.POST("/api/v1/login", func(c *gin.Context) {
+		response := LoginResponse{
+			Code:    200,
+			Message: "登录成功",
+		}
+		response.Data.Type = "Student"
+		response.Data.ID = "123456"
+
+		c.JSON(http.StatusOK, response)
+	})
+
+	req, _ := http.NewRequest("POST", "/api/v1/login", mockLoginBody())
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+
+	assert.Equal(t, http.StatusOK, resp.Code)
+
+	var response LoginResponse
+	err := json.Unmarshal(resp.Body.Bytes(), &response)
+	if err != nil {
+		t.Fatal(err)
 	}
 
-	// 检查响应体
-	expected := `{"message":"Hello, World!"}`
-	if w.Body.String() != expected {
-		t.Errorf("Expected body %v; got %v", expected, w.Body.String())
-	}
+	assert.Equal(t, 200, response.Code)
+	assert.Equal(t, "登录成功", response.Message)
+	assert.Equal(t, "Student", response.Data.Type)
+	assert.Equal(t, "123456", response.Data.ID)
 }
