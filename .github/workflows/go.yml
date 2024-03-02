@@ -24,11 +24,14 @@ jobs:
     - name: Install dependencies
       run: |
           cd backend
-          go get .
+          go get -t .
           go get github.com/gin-gonic/gin
           go get gorm.io/gorm
           go get gorm.io/driver/postgres
           
+    - name: database
+      run: docker run -id --name=postgres-test -v postgre-data:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_PASSWORD=123456 -e LANG=C.UTF-8 postgres
+    
     - name: Build
       run: |
             cd backend
