@@ -48,7 +48,7 @@ func main() {
 
 	// 设置路由
 	r.Use(corsMiddleware())
-	r.POST("/your-endpoint", YourHandler)
+	// r.POST("/your-endpoint", YourHandler)
 
 	// 运行服务
 
@@ -60,15 +60,22 @@ func main() {
 	})
 
 	r.POST("/api/v1/login", func(c *gin.Context) {
+		body, err := ioutil.ReadAll(c.Request.Body)
+
+		if err != nil {
+			// 处理读取请求体错误
+			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "Failed to read request body"})
+			return
+		}
+
+		fmt.Print(body)
+
 		response := LoginResponse{
 			Code:    200,
 			Message: "登录成功",
 		}
 		response.Data.Type = "Student"
 		response.Data.ID = "123456"
-		var body = make([]byte, 0)
-		c.Request.Body.Read(body)
-		fmt.Print(body)
 
 		c.JSON(http.StatusOK, response)
 	})
