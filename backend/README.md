@@ -10,7 +10,7 @@ go mod init  github.com/GeekpieDevOps/growth-document
 go get -u github.com/gin-gonic/gin
 go get -u gorm.io/gorm
 go get -u gorm.io/driver/postgres
-gi get -u github.com/stretchr/testify/assert
+g0 get -u github.com/stretchr/testify/assert
 ```
 
 2.创建main.go文件，进行Hello World实例测试，以及数据库访问和端口连接
