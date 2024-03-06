@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -20,6 +21,19 @@ type LoginResponse struct {
 	} `json:"data"`
 }
 
+type DefaultResponse struct {
+	Code    int64                  `json:"code"`
+	Data    map[string]interface{} `json:"data"`
+	Message string                 `json:"message"`
+}
+
+type RequestData struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Nickname string `json:"nickname"`
+	ID       string `json:"id"`
+}
+
 // 定义基本的 User 模型
 type User struct {
 	Code    int    `json:"code"`
@@ -28,11 +42,6 @@ type User struct {
 		Type string `json:"type"`
 		ID   string `json:"id"`
 	} `json:"data"`
-	//gorm.Model
-	/* Name     string
-	Mail     string
-	Password string
-	StuID    string */
 }
 
 func main() {
@@ -41,13 +50,41 @@ func main() {
 	// 初始化 Gorm
 	// var db *gorm.DB // 由于后面的代码中使用的是简短模式 := ，此处的定义是冗余的
 	// 临时数据库启动命令(Docker): docker run -id --name=postgres-test -v postgre-data:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_PASSWORD=123456 -e LANG=C.UTF-8 postgres
-	dsn := "host=localhost user=postgres password=123456 dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai" //postgres 是 PostgreSQL 的默认用户名和数据库名称
-
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{}) //"   "应该填链接，由于我不知道postgres的链接形式，所以这里只是一个示例
+	dsn := "host=localhost user=postgres password=yourpassword dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai" //postgres 是 PostgreSQL 的默认用户名和数据库名称
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})                                                                     //"   "应该填链接，由于我不知道postgres的链接形式，所以这里只是一个示例
 	if err != nil {
 		panic("Failed to connect to database")
 	}
 	fmt.Println("Successfully connected to database")
+	// 准备创建表的SQL语句
+	createTableStmt := `
+    	CREATE TABLE IF NOT EXISTS userss (
+        	id SERIAL PRIMARY KEY,
+        	email TEXT NOT NULL,
+        	password TEXT NOT NULL,
+        	nickname TEXT NOT NULL
+        )
+    `
+	result := db.Exec(createTableStmt)
+	if result.Error != nil {
+		fmt.Println("执行SQL语句失败:", result.Error)
+		return
+	}
+	fmt.Println("表创建成功")
+	tableName := "userss"
+
+	// 查询列名
+	var columns []string
+	result = db.Raw("SELECT column_name FROM information_schema.columns WHERE table_name = ?", tableName).Scan(&columns)
+	if result.Error != nil {
+		fmt.Println("查询列名失败:", result.Error)
+		return
+	}
+	fmt.Println("表", tableName, "的列名:")
+	for _, columnName := range columns {
+		fmt.Println(columnName)
+	}
+
 	// 自动迁移数据库模式
 	db.AutoMigrate(&User{})
 	// 设置路由
@@ -92,13 +129,50 @@ func main() {
 		}
 
 		fmt.Print(string(body))
+		var requestData RequestData
+		err = json.Unmarshal([]byte(body), &requestData)
+		if err != nil {
+			fmt.Println("解析JSON失败:", err)
+			return
+		}
+		// 打印各个字段的值
+		fmt.Println("Email:", requestData.Email)
+		fmt.Println("Password:", requestData.Password)
+		fmt.Println("Nickname:", requestData.Nickname)
+		fmt.Println("ID:", requestData.ID)
+		/*var existingUser User
+		if err := db.Where("id = ?", requestData.ID).First(&existingUser).Error; err == nil {
+
+			fmt.Println("Point1")
+
+			c.JSON(http.StatusBadRequest, DefaultResponse{
+				Code:    http.StatusBadRequest,
+				Message: "ID 已存在",
+			})
+			return
+			fmt.Println("Point2")
+		}*/
+
+		// 执行插入操作
+		insertStmt := `INSERT INTO userss (email, password, nickname, id) VALUES ($1, $2, $3, $4)`
+		result := db.Exec(insertStmt, requestData.Email, requestData.Password, requestData.Nickname, requestData.ID)
+		if result.Error != nil {
+			c.JSON(http.StatusBadRequest, DefaultResponse{
+				Code:    http.StatusBadRequest,
+				Message: "ID 已存在",
+			})
+			fmt.Println("插入数据失败:", result.Error)
+			return
+		}
+
+		fmt.Println("数据插入成功")
 
 		response := User{
 			Code:    200,
-			Message: "登录成功",
+			Message: "注册成功",
 		}
-		response.Data.Type = "Student"
-		response.Data.ID = "123456"
+		response.Data.Type = requestData.Nickname
+		response.Data.ID = requestData.ID
 
 		c.JSON(http.StatusOK, response)
 	})
