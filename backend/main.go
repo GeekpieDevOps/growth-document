@@ -44,6 +44,45 @@ type User struct {
 	} `json:"data"`
 }
 
+
+
+func UpdateUser(c *gin.Context) {
+	id := c.Param("id")
+
+	//检查用户是否存在
+	var user User
+	result := db.First(&user, id)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
+		return
+	}
+
+	//对用户的email, password, nickname进行更新
+	var requestData struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+		Nickname string `json:"nickname"`
+	}
+	err := c.ShouldBindJSON(&requestData)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid request data"})
+		return
+	}
+
+	user.Email = requestData.Email
+	user.Password = requestData.Password
+	user.Nickname = requestData.Nickname
+
+	result = db.Save(&user)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to update user"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
+}
+
+
 func main() {
 	// 初始化 Gin
 	r := gin.Default()
@@ -65,6 +104,7 @@ func main() {
         	nickname TEXT NOT NULL
         )
     `
+	// 执行SQL语句
 	result := db.Exec(createTableStmt)
 	if result.Error != nil {
 		fmt.Println("执行SQL语句失败:", result.Error)
@@ -176,6 +216,8 @@ func main() {
 
 		c.JSON(http.StatusOK, response)
 	})
+
+	r.PUT("/api/v1/update", UpdateUser)//将UpdateUser函数与相应的HTTP请求方法和路径进行关联
 
 	// 运行服务
 	err = r.Run(":18080")
