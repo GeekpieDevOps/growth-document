@@ -34,6 +34,14 @@ type RequestData struct {
 	ID       string `json:"id"`
 }
 
+
+type UpdateResponse struct {
+	Message string `json:"message"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	ID       string `json:"id"`
+}
+
 // 定义基本的 User 模型
 type User struct {
 	Code    int    `json:"code"`
@@ -46,7 +54,7 @@ type User struct {
 
 
 
-func UpdateUser(c *gin.Context) {
+func UpdateUser(c *gin.Context,db *gorm.DB) {
 	id := c.Param("id")
 
 	//检查用户是否存在
@@ -69,17 +77,20 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	user.Email = requestData.Email
-	user.Password = requestData.Password
-	user.Nickname = requestData.Nickname
-
 	result = db.Save(&user)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to update user"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
+	response := UpdateResponse{
+		Email:    requestData.Email,
+		Password: requestData.Password,
+		ID:       user.Data.ID,
+	}
+	response.Message = "User updated successfully"
+
+	c.JSON(http.StatusOK, response)
 }
 
 
@@ -217,7 +228,7 @@ func main() {
 		c.JSON(http.StatusOK, response)
 	})
 
-	r.PUT("/api/v1/update", UpdateUser)//将UpdateUser函数与相应的HTTP请求方法和路径进行关联
+	r.PUT("/api/v1/update", UpdateUser(c *gin.Context,db))//将UpdateUser函数与相应的HTTP请求方法和路径进行关联
 
 	// 运行服务
 	err = r.Run(":18080")
