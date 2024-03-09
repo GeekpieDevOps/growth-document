@@ -228,7 +228,10 @@ func main() {
 		c.JSON(http.StatusOK, response)
 	})
 
-	r.PUT("/api/v1/update", UpdateUser(c *gin.Context,db))//将UpdateUser函数与相应的HTTP请求方法和路径进行关联
+	c := gin.Context{}
+	r.PUT("/api/v1/update", func(c *gin.Context) {//将UpdateUser函数与相应的HTTP请求方法和路径进行关联
+		UpdateUser(c, db)
+	})
 
 	// 运行服务
 	err = r.Run(":18080")
