@@ -6,6 +6,27 @@
 - vuetify
 - vite
 
+## Structure
+
+- dist
+- node_modules
+- public
+- src
+  - asserts
+    _Used to put the static files, like css, img_
+  - components
+    _Used to put the .vue components, which can be used repeatedly._
+  - hooks
+    _Used to put the public functions, which can be used repeatedly._
+    - checkValid.ts
+      _The functions used to check the inputs in form is valid_
+  - pages
+    _Used to struct the pages. There are two files in each dir, App.vue and main.js._
+    - login
+    - member
+    - signup
+  - plugins
+
 ## Tips
 
 When you git push your code to github, it is not be recommended to push the node_modules dir (abspath: frontend/vue/node_modules). The reason is on [https://segmentfault.com/q/1010000018517286](https://segmentfault.com/q/1010000018517286 "https://segmentfault.com/q/1010000018517286"). Just following the .gitignore will be fine.

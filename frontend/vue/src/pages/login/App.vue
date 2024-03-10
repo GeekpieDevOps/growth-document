@@ -1,7 +1,7 @@
 <template>
   <v-app class="bg-blue-lighten-2">
     <v-main>
-      <LoginNav />
+      <LoginNav :tab="0" />
       <v-container
         fluid
         fill-height
@@ -15,15 +15,11 @@
           <v-col cols="0" sm="2" md="3"></v-col
         ></v-row>
         <v-row class="d-flex justify-space-around align-center pt-5">
-          <LogoShow /> </v-row
-        ><v-spacer></v-spacer>
+          <LogoShow />
+        </v-row>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
-<script setup>
-import LoginNav from "@/components/LoginNav.vue";
-
-//
-</script>
+<script setup></script>

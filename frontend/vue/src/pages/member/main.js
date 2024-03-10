@@ -8,7 +8,7 @@
 import { registerPlugins } from "@/plugins";
 
 // Components
-import App from "@/pages/signup/App.vue";
+import App from "@/pages/member/App.vue";
 
 // Composables
 import { createApp } from "vue";

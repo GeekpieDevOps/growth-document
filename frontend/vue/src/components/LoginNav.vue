@@ -4,7 +4,7 @@
   >
     <template v-slot:prepend> 书院综合素质成长档案平台 </template>
     <template v-slot:append>
-      <v-tabs align-tabs="center" class="d-none d-sm-flex">
+      <v-tabs v-model="tab" align-tabs="center" class="d-none d-sm-flex">
         <v-tab href="https://www.shanghaitech.edu.cn/" target="_blank">
           登录
         </v-tab>
@@ -20,3 +20,11 @@
     >
   </v-app-bar>
 </template>
+
+<script setup>
+import { ref } from "vue";
+const props = defineProps({
+  tab: Number,
+});
+const tab = ref(props.tab);
+</script>
