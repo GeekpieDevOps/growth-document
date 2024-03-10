@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cool Navigation Bar</title>
+
+  <link rel="stylesheet" href="./index.css" >
+  <!-- <link rel="stylesheet" href="styles.css">   -->
+
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+        <div class="logo">
+          <a href="#">Your Logo</a>
+        </div>
+        <div id="mainListDiv" class="main_list">
+          <ul class="navlinks">
+            <li>
+            
+            </li>
+            <li>
+              <button class="btn">
+                <strong>Spa</strong>
+                <div id="container-stars">
+                  <div id="stars"></div>
+                </div>
+              
+                <div id="glow">
+                  <div class="circle"></div>
+                  <div class="circle"></div>
+                </div>
+              </button>
+            </li>
+            <li><a href="#">Portfolio</a></li>
+            
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <span class="navTrigger">
+            <i></i>
+            <i></i>
+            <i></i>
+        </span>
+    </div>
+  </nav>
+
+
+
+
+  
+<section class="home">
+</section>
+<div style="height: 1000px">
+    <!-- just to make scrolling effect possible -->
+  <h2 class="myH2">What is this ?</h2>
+  <p class="myP">This is a responsive fixed navbar animated on scroll</p>
+  <p class="myP">I took inspiration from  ABDO STEIF</p>
+  <p class="myP">I HOPE YOU FIND THIS USEFULL</p>
+  
+</div>
+<v-bottom-sheet>
+  <v-card
+    title="Bottom Sheet"
+    text="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ut, eos? Nulla aspernatur odio rem, culpa voluptatibus eius debitis."
+  ></v-card>
+</v-bottom-sheet>
+<!-- Jquery needed -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="index.js"></script>
+
+<!-- Function used to shrink nav bar removing paddings and adding black background -->
+<script>
+    $(window).scroll(function() {
+        if ($(document).scrollTop() > 50) {
+            $('.nav').addClass('affix');
+            //console.log("OK");
+        } else {
+            $('.nav').removeClass('affix');
+        }
+    });
+    $('.navTrigger').click(function () {
+      $(this).toggleClass('active');
+      //console.log("Clicked menu");
+      $("#mainListDiv").toggleClass("show_list");
+      $("#mainListDiv").fadeIn();
+  
+  });
+  
+
+  $(document).ready(function() {
+    // 监听按钮点击事件
+    $('.btn').click(function() {
+      // 执行页面跳转
+      window.open("https://www.baidu.com/");
+    });
+  });
+
+
+  document.getElementsByClassName("btn").addEventListener("mouseover", function () {
+    // 随机生成两种颜色
+    var color1 = getRandomColor();
+    var color2 = getRandomColor();
+  
+    // 应用动态生成的渐变颜色
+    this.style.backgroundImage = "linear-gradient(90deg, " + color1 + ", " + color2 + ")";
+  });
+  
+  document.getElementsByClassName("btn").addEventListener("mouseout", function () {
+    // 恢复原始渐变颜色
+    this.style.backgroundImage = "linear-gradient(90deg, #3ec074, #3e9bc0)";
+  });
+  
+  // 随机生成十六进制颜色
+  function getRandomColor() {
+    var letters = "0123456789ABCDEF";
+    var color = "#";
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+  
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="./reset.css" />  -->
+    <style>
+      /* 200截止 */
+      :root {
+        --scrollLen: 500px;
+      }
+      .container {
+        position: absolute;
+        height: 300vh;
+        /* top : 50%;*/
+        
+      }
+      .hide {
+        position: absolute;
+        top: var(--scrollLen);
+      }
+      video {
+        height: 100vh;
+        position: fixed;
+      }
+      .set {
+        height: 200vh;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <video src="./testss.mp4"></video>
+      <div class="set"></div>
+      <div class="text">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, quaerat
+        aperiam. Possimus deserunt quas tempore quasi exercitationem repellat
+        distinctio? Distinctio enim ab vel aperiam. Sed deleniti quisquam
+        corrupti ipsam voluptate quaerat tempore provident eveniet, repudiandae
+        fugit quam? Id unde commodi ad iure temporibus laborum fuga pariatur
+        voluptatem quis et? Modi nihil voluptatum, minus quidem, voluptatem,
+        vero autem alias saepe exercitationem reprehenderit qui recusandae
+        ducimus! Dolore, sint sunt deleniti provident facilis error, quibusdam
+        labore reiciendis voluptatibus saepe, veritatis ducimus ipsa quaerat
+        quisquam pariatur consectetur sed magnam quod delectus nihil. Unde,
+        nostrum molestiae saepe iure laborum rem! Quaerat voluptatem nobis
+        cupiditate veritatis!
+      </div>
+    </div>
+  </body>
+  <script>
+    const video = document.querySelector("video");
+    //const root = document.querySelector(":root");
+    var test = 0;
+    console.log(video.duration);
+    var scrollLen = 700;
+    
+    window.addEventListener("scroll", () => {
+      video.currentTime =
+        (Math.min(window.scrollY, scrollLen) / scrollLen) * video.duration;
+      if (window.scrollY > scrollLen) {
+        video.setAttribute("class", "hide");
+      } else {
+        video.setAttribute("class", "");
+      }
+      if (window.scrollY > scrollLen){
+        var opacity = 1 - Math.min(window.scrollY / scrollLen*1.3-1, 1);
+        video.style.opacity = opacity;
+      }else{
+        video.style.opacity = 1;
+      }
+      
+
+      // 设置视频透明度
+      
+    });
+  </script>
+</html>
