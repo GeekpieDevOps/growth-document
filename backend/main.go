@@ -262,7 +262,6 @@ func main() {
 		fmt.Println(columnName)
 	}
 
-	// 自动迁移数据库模式
 	db.AutoMigrate(&User{})
 
 	r := setupRouter(db)
