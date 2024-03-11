@@ -191,8 +191,6 @@ func DeleteUser(c *gin.Context, db *gorm.DB) {
 }
 
 func main() {
-	r := gin.Default()
-
 	// 初始化 Gorm
 	// var db *gorm.DB // 由于后面的代码中使用的是简短模式 := ，此处的定义是冗余的
 	// 临时数据库启动命令(Docker): docker run -id --name=postgres-test -v postgre-data:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_PASSWORD=123456 -e LANG=C.UTF-8 postgres
@@ -234,6 +232,8 @@ func main() {
 
 	// 自动迁移数据库模式
 	db.AutoMigrate(&User{})
+
+	r := gin.Default()
 	// 设置路由
 	r.Use(corsMiddleware())
 	// r.POST("/your-endpoint", YourHandler)
