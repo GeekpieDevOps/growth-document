@@ -6,7 +6,7 @@
         fluid
         fill-height
         style="width: 100vw; height: 100vh"
-        class="d-flex flex-column pa-10 justify-center"
+        class="d-flex flex-column pa-1 pa-sm-10 justify-center"
       >
         <v-spacer></v-spacer>
         <v-row>
@@ -14,7 +14,7 @@
           <v-col cols="12" sm="8" md="6"> <LoginCard /></v-col>
           <v-col cols="0" sm="2" md="3"></v-col
         ></v-row>
-        <v-row class="d-flex justify-space-around align-center pt-5">
+        <v-row class="d-flex justify-space-around align-center py-5 px-2">
           <LogoShow />
         </v-row>
       </v-container>

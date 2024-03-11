@@ -6,7 +6,7 @@
         fluid
         fill-height
         style="width: 100vw; height: 100vh"
-        class="d-flex flex-column pa-10 justify-center"
+        class="d-flex flex-column pa-1 pa-sm-10 justify-center"
       >
         <v-spacer></v-spacer>
         <v-row>
