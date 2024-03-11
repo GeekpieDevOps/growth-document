@@ -190,6 +190,38 @@ func DeleteUser(c *gin.Context, db *gorm.DB) {
 	c.JSON(http.StatusOK, gin.H{"code": 200, "message": "User deleted successfully"})
 }
 
+func setupRouter(db *gorm.DB) *gin.Engine {
+	r := gin.Default()
+
+	r.Use(corsMiddleware())
+
+	// r.POST("/your-endpoint", YourHandler)
+
+	r.POST("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Hello, World!",
+		})
+	})
+
+	r.POST("/api/v1/login", func(c *gin.Context) {
+		Login(c, db)
+	})
+
+	r.POST("/api/v1/register", func(c *gin.Context) {
+		Register(c, db)
+	})
+
+	r.PUT("/api/v1/update", func(c *gin.Context) {
+		UpdateUser(c, db)
+	})
+
+	r.DELETE("/api/v1/delete", func(c *gin.Context) {
+		DeleteUser(c, db)
+	})
+
+	return r
+}
+
 func main() {
 	// 初始化 Gorm
 	// var db *gorm.DB // 由于后面的代码中使用的是简短模式 := ，此处的定义是冗余的
@@ -233,33 +265,7 @@ func main() {
 	// 自动迁移数据库模式
 	db.AutoMigrate(&User{})
 
-	r := gin.Default()
-	// 设置路由
-	r.Use(corsMiddleware())
-	// r.POST("/your-endpoint", YourHandler)
-	// 运行服务
-
-	r.POST("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello, World!",
-		})
-	})
-
-	r.POST("/api/v1/login", func(c *gin.Context) {
-		Login(c, db)
-	})
-
-	r.POST("/api/v1/register", func(c *gin.Context) {
-		Register(c, db)
-	})
-
-	r.PUT("/api/v1/update", func(c *gin.Context) {
-		UpdateUser(c, db)
-	})
-
-	r.DELETE("/api/v1/delete", func(c *gin.Context) {
-		DeleteUser(c, db)
-	})
+	r := setupRouter(db)
 
 	err = r.Run()
 	if err != nil {
