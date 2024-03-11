@@ -7,4 +7,5 @@ import (
 
 func Mount(r *gin.RouterGroup, db *gorm.DB) {
 	r.POST("/login", Login(db))
+	r.POST("/register", Register(db))
 }

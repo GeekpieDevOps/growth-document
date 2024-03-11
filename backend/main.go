@@ -1,9 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 
@@ -41,64 +39,6 @@ type User struct {
 		Type string `json:"type"`
 		ID   string `json:"id"`
 	} `json:"data"`
-}
-
-func Register(c *gin.Context, db *gorm.DB) {
-	body, err := io.ReadAll(c.Request.Body)
-
-	if err != nil {
-		// 处理读取请求体错误
-		c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "Failed to read request body"})
-		return
-	}
-
-	fmt.Print(string(body))
-	var requestData RequestData
-	err = json.Unmarshal([]byte(body), &requestData)
-	if err != nil {
-		fmt.Println("解析JSON失败:", err)
-		return
-	}
-	// 打印各个字段的值
-	fmt.Println("Email:", requestData.Email)
-	fmt.Println("Password:", requestData.Password)
-	fmt.Println("Nickname:", requestData.Nickname)
-	fmt.Println("ID:", requestData.ID)
-	/*var existingUser User
-	if err := db.Where("id = ?", requestData.ID).First(&existingUser).Error; err == nil {
-
-		fmt.Println("Point1")
-
-		c.JSON(http.StatusBadRequest, DefaultResponse{
-			Code:    http.StatusBadRequest,
-			Message: "ID 已存在",
-		})
-		return
-		fmt.Println("Point2")
-	}*/
-
-	// 执行插入操作
-	insertStmt := `INSERT INTO userss (email, password, nickname, id) VALUES ($1, $2, $3, $4)`
-	result := db.Exec(insertStmt, requestData.Email, requestData.Password, requestData.Nickname, requestData.ID)
-	if result.Error != nil {
-		c.JSON(http.StatusBadRequest, DefaultResponse{
-			Code:    http.StatusBadRequest,
-			Message: "ID 已存在",
-		})
-		fmt.Println("插入数据失败:", result.Error)
-		return
-	}
-
-	fmt.Println("数据插入成功")
-
-	response := User{
-		Code:    200,
-		Message: "注册成功",
-	}
-	response.Data.Type = requestData.Nickname
-	response.Data.ID = requestData.ID
-
-	c.JSON(http.StatusOK, response)
 }
 
 func UpdateUser(c *gin.Context, db *gorm.DB) {
@@ -178,10 +118,6 @@ func setupRouter(db *gorm.DB) *gin.Engine {
 	group := r.Group("/api")
 
 	api.Mount(group, db)
-
-	r.POST("/api/v1/register", func(c *gin.Context) {
-		Register(c, db)
-	})
 
 	r.PUT("/api/v1/update", func(c *gin.Context) {
 		UpdateUser(c, db)
