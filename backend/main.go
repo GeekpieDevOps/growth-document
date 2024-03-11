@@ -42,7 +42,6 @@ type UpdateResponse struct {
 	ID       string `json:"id"`
 }
 
-// 定义基本的 User 模型
 type User struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
@@ -192,8 +191,8 @@ func DeleteUser(c *gin.Context, db *gorm.DB) {
 }
 
 func main() {
-	// 初始化 Gin
 	r := gin.Default()
+
 	// 初始化 Gorm
 	// var db *gorm.DB // 由于后面的代码中使用的是简短模式 := ，此处的定义是冗余的
 	// 临时数据库启动命令(Docker): docker run -id --name=postgres-test -v postgre-data:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_PASSWORD=123456 -e LANG=C.UTF-8 postgres
@@ -240,7 +239,6 @@ func main() {
 	// r.POST("/your-endpoint", YourHandler)
 	// 运行服务
 
-	// Hello World HTTP Endpoint -> JSON
 	r.POST("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Hello, World!",
@@ -255,15 +253,14 @@ func main() {
 		Register(c, db)
 	})
 
-	r.PUT("/api/v1/update", func(c *gin.Context) { //将UpdateUser函数与相应的HTTP请求方法和路径进行关联
+	r.PUT("/api/v1/update", func(c *gin.Context) {
 		UpdateUser(c, db)
 	})
 
-	r.DELETE("/api/v1/delete", func(c *gin.Context) { //将DeleteUser函数与相应的HTTP请求方法和路径进行关联
+	r.DELETE("/api/v1/delete", func(c *gin.Context) {
 		DeleteUser(c, db)
 	})
 
-	// 运行服务
 	err = r.Run()
 	if err != nil {
 		log.Fatal(err)
