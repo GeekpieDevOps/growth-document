@@ -264,7 +264,7 @@ func main() {
 	})
 
 	// 运行服务
-	err = r.Run(":18080")
+	err = r.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
