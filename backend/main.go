@@ -13,15 +13,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type LoginResponse struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-	Data    struct {
-		Type string `json:"type"`
-		ID   string `json:"id"`
-	} `json:"data"`
-}
-
 type DefaultResponse struct {
 	Code    int64                  `json:"code"`
 	Data    map[string]interface{} `json:"data"`

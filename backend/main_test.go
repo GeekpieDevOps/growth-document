@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	v1 "github.com/GeekpieDevOps/growth-document/backend/api/v1"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
@@ -50,7 +51,7 @@ func TestLoginEndpoint(t *testing.T) {
 	router := gin.Default()
 
 	router.POST("/api/v1/login", func(c *gin.Context) {
-		response := LoginResponse{
+		response := v1.LoginResponse{
 			Code:    200,
 			Message: "登录成功",
 		}
@@ -66,7 +67,7 @@ func TestLoginEndpoint(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, resp.Code)
 
-	var response LoginResponse
+	var response v1.LoginResponse
 	err := json.Unmarshal(resp.Body.Bytes(), &response)
 	if err != nil {
 		t.Fatal(err)
