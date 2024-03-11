@@ -34,10 +34,9 @@ type RequestData struct {
 	ID       string `json:"id"`
 }
 
-
 type UpdateResponse struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Code     int    `json:"code"`
+	Message  string `json:"message"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	ID       string `json:"id"`
@@ -131,14 +130,14 @@ func Register(c *gin.Context, db *gorm.DB) {
 	c.JSON(http.StatusOK, response)
 }
 
-func UpdateUser(c *gin.Context,db *gorm.DB) {
+func UpdateUser(c *gin.Context, db *gorm.DB) {
 	id := c.Param("id")
 
 	//检查用户是否存在
 	var user User
 	result := db.First(&user, id)
 	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"code":500,"message": "User not found"})
+		c.JSON(http.StatusNotFound, gin.H{"code": 500, "message": "User not found"})
 		return
 	}
 
@@ -150,18 +149,18 @@ func UpdateUser(c *gin.Context,db *gorm.DB) {
 	}
 	err := c.ShouldBindJSON(&requestData)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"code":500,"message": "Invalid request data"})
+		c.JSON(http.StatusBadRequest, gin.H{"code": 500, "message": "Invalid request data"})
 		return
 	}
 
 	result = db.Save(&user)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"code":500,"message": "Failed to update user"})
+		c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "Failed to update user"})
 		return
 	}
 
 	response := UpdateResponse{
-		Code: 200,
+		Code:     200,
 		Email:    requestData.Email,
 		Password: requestData.Password,
 		ID:       user.Data.ID,
@@ -172,27 +171,25 @@ func UpdateUser(c *gin.Context,db *gorm.DB) {
 }
 
 func DeleteUser(c *gin.Context, db *gorm.DB) {
-    id := c.Param("id")
+	id := c.Param("id")
 
-    // 检查用户是否存在
-    var user User
-    result := db.First(&user, id)
-    if result.Error != nil {
-        c.JSON(http.StatusNotFound, gin.H{"code":500,"message": "User not found"})
-        return
-    }
+	// 检查用户是否存在
+	var user User
+	result := db.First(&user, id)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"code": 500, "message": "User not found"})
+		return
+	}
 
-    // 删除用户
-    result = db.Delete(&user)
-    if result.Error != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"code":500,"message": "Failed to delete user"})
-        return
-    }
+	// 删除用户
+	result = db.Delete(&user)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "Failed to delete user"})
+		return
+	}
 
-    c.JSON(http.StatusOK, gin.H{"code":200,"message": "User deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"code": 200, "message": "User deleted successfully"})
 }
-
-
 
 func main() {
 	// 初始化 Gin
@@ -258,11 +255,11 @@ func main() {
 		Register(c, db)
 	})
 
-	r.PUT("/api/v1/update", func(c *gin.Context) {//将UpdateUser函数与相应的HTTP请求方法和路径进行关联
+	r.PUT("/api/v1/update", func(c *gin.Context) { //将UpdateUser函数与相应的HTTP请求方法和路径进行关联
 		UpdateUser(c, db)
 	})
 
-	r.DELETE("/api/v1/delete", func(c *gin.Context) {//将DeleteUser函数与相应的HTTP请求方法和路径进行关联
+	r.DELETE("/api/v1/delete", func(c *gin.Context) { //将DeleteUser函数与相应的HTTP请求方法和路径进行关联
 		DeleteUser(c, db)
 	})
 
