@@ -1,13 +1,20 @@
 package v1
 
 import (
-	"fmt"
+	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 
+	"github.com/GeekpieDevOps/growth-document/backend/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
+
+type LoginRequest struct {
+	Email    string
+	Password string
+}
 
 type LoginResponse struct {
 	Code    int    `json:"code"`
@@ -22,12 +29,23 @@ func Login(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		body, err := io.ReadAll(c.Request.Body)
 		if err != nil {
-			// 处理读取请求体错误
 			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "Failed to read request body"})
 			return
 		}
 
-		fmt.Print(string(body))
+		var req LoginRequest
+		err = json.Unmarshal(body, &req)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "Failed to parse request body"})
+			return
+		}
+
+		var user models.User
+		result := db.Where("email = ? AND password = ?", req.Email, req.Password).First(&user)
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			c.String(http.StatusNotFound, "")
+			return
+		}
 
 		response := LoginResponse{
 			Code:    200,
