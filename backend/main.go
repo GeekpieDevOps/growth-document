@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 
@@ -53,7 +53,7 @@ type User struct {
 }
 
 func Login(c *gin.Context, db *gorm.DB) {
-	body, err := ioutil.ReadAll(c.Request.Body)
+	body, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		// 处理读取请求体错误
 		c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "Failed to read request body"})
@@ -73,7 +73,7 @@ func Login(c *gin.Context, db *gorm.DB) {
 }
 
 func Register(c *gin.Context, db *gorm.DB) {
-	body, err := ioutil.ReadAll(c.Request.Body)
+	body, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
 		// 处理读取请求体错误
