@@ -1,10 +1,13 @@
 package user
 
 import (
+	"errors"
 	"net/http"
 
+	"github.com/GeekpieDevOps/growth-document/backend/models"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
 )
@@ -14,12 +17,16 @@ type SignUpRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type SignUpResponse struct {
+	UUID uuid.UUID
+}
+
 func SignUp(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var req SignUpRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
 			if v, ok := err.(validator.ValidationErrors); ok {
-				c.JSON(http.StatusBadRequest,
+				c.AbortWithStatusJSON(http.StatusBadRequest,
 					lo.Map(v, func(f validator.FieldError, _ int) string {
 						return f.Field()
 					}),
@@ -27,10 +34,36 @@ func SignUp(db *gorm.DB) func(c *gin.Context) {
 				return
 			}
 
-			c.String(http.StatusBadRequest, "")
+			c.AbortWithStatus(http.StatusBadRequest)
 			return
 		}
 
-		c.String(http.StatusNotImplemented, "")
+		var user models.User
+		result := db.Where("email = ?", req.Email).First(&user)
+		if result.Error == nil {
+			c.AbortWithStatus(http.StatusConflict)
+			return
+		} else if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			c.AbortWithError(http.StatusInternalServerError, result.Error)
+			return
+		}
+
+		user = models.User{
+			UUID:     uuid.New(),
+			ID:       "",
+			Email:    req.Email,
+			Password: req.Password,
+			Nickname: "",
+		}
+
+		result = db.Create(&user)
+		if result.Error != nil {
+			c.AbortWithError(http.StatusInternalServerError, result.Error)
+			return
+		}
+
+		c.JSON(http.StatusOK, SignUpResponse{
+			user.UUID,
+		})
 	}
 }
