@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/GeekpieDevOps/growth-document/backend/api"
@@ -26,7 +25,6 @@ func main() {
 	if err != nil {
 		panic("Failed to connect to database")
 	}
-	fmt.Println("Successfully connected to database")
 
 	db.AutoMigrate(&models.User{})
 
