@@ -12,7 +12,7 @@ import (
 // TODO: split into small sections for different endpoints
 // TODO: use temporary database
 func TestEverything(t *testing.T) {
-	db, err := setupPostgres()
+	db, err := setupDatabase()
 	assert.NoError(t, err)
 
 	router := setupRouter(db)
