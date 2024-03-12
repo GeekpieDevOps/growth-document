@@ -21,9 +21,7 @@ func setupRouter(db *gorm.DB) *gin.Engine {
 		})
 	})
 
-	group := r.Group("/api")
-
-	api.Mount(group, db)
+	api.Mount(r.Group("/api"), db)
 
 	return r
 }
