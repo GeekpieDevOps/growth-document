@@ -102,8 +102,9 @@ func setupRouter(db *gorm.DB) *gin.Engine {
 }
 
 func main() {
-	dsn := "host=localhost user=postgres password=yourpassword dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai" //postgres 是 PostgreSQL 的默认用户名和数据库名称
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})                                                                     //"   "应该填链接，由于我不知道postgres的链接形式，所以这里只是一个示例
+	// FIXME: default user name and database name is used here
+	dsn := "host=localhost user=postgres password=yourpassword dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("Failed to connect to database")
 	}
