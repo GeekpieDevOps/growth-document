@@ -6,78 +6,11 @@ import (
 	"net/http"
 
 	"github.com/GeekpieDevOps/growth-document/backend/api"
+	"github.com/GeekpieDevOps/growth-document/backend/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
-
-type DefaultResponse struct {
-	Code    int64                  `json:"code"`
-	Data    map[string]interface{} `json:"data"`
-	Message string                 `json:"message"`
-}
-
-type RequestData struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Nickname string `json:"nickname"`
-	ID       string `json:"id"`
-}
-
-type UpdateResponse struct {
-	Code     int    `json:"code"`
-	Message  string `json:"message"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	ID       string `json:"id"`
-}
-
-type User struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-	Data    struct {
-		Type string `json:"type"`
-		ID   string `json:"id"`
-	} `json:"data"`
-}
-
-func UpdateUser(c *gin.Context, db *gorm.DB) {
-	id := c.Param("id")
-
-	var user User
-	result := db.First(&user, id)
-	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"code": 500, "message": "User not found"})
-		return
-	}
-
-	var requestData struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-		Nickname string `json:"nickname"`
-	}
-	err := c.ShouldBindJSON(&requestData)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"code": 500, "message": "Invalid request data"})
-		return
-	}
-
-	result = db.Save(&user)
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "Failed to update user"})
-		return
-	}
-
-	response := UpdateResponse{
-		Code:     200,
-		Email:    requestData.Email,
-		Password: requestData.Password,
-		ID:       user.Data.ID,
-	}
-	response.Message = "User updated successfully"
-
-	c.JSON(http.StatusOK, response)
-}
 
 func setupRouter(db *gorm.DB) *gin.Engine {
 	r := gin.Default()
@@ -94,10 +27,6 @@ func setupRouter(db *gorm.DB) *gin.Engine {
 
 	api.Mount(group, db)
 
-	r.PUT("/api/v1/update", func(c *gin.Context) {
-		UpdateUser(c, db)
-	})
-
 	return r
 }
 
@@ -110,7 +39,7 @@ func main() {
 	}
 	fmt.Println("Successfully connected to database")
 
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&models.User{})
 
 	r := setupRouter(db)
 
