@@ -15,8 +15,6 @@ import (
 func setupRouter(db *gorm.DB) *gin.Engine {
 	r := gin.Default()
 
-	r.Use(corsMiddleware())
-
 	r.POST("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Hello, World!",
@@ -46,19 +44,5 @@ func main() {
 	err = r.Run()
 	if err != nil {
 		log.Fatal(err)
-	}
-}
-
-func corsMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-		c.Writer.Header().Set("Access-Control-Max-Age", "86400")
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(http.StatusNoContent)
-			return
-		}
-		c.Next()
 	}
 }
