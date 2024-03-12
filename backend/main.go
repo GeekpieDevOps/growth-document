@@ -23,7 +23,7 @@ func main() {
 
 	db, err := setupPostgres(dsn)
 	if err != nil {
-		// error already logged above
+		// errors are already logged
 		os.Exit(1)
 	}
 
