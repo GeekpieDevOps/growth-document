@@ -25,15 +25,13 @@ const tabIndex = ref(1);
   <v-app>
     <v-main>
       <v-container>
-        <v-row>
-          <v-app-bar color="blue" class="px-3">
-            <v-app-bar-nav-icon
-              class="d-flex d-md-none"
-              @click="isdraw = !isdraw"
-            ></v-app-bar-nav-icon>
-            <v-toolbar-title>欢迎：{{ user.name }}</v-toolbar-title>
-          </v-app-bar>
-        </v-row>
+        <v-app-bar color="blue" class="px-3">
+          <v-app-bar-nav-icon
+            class="d-flex d-md-none"
+            @click="isdraw = !isdraw"
+          ></v-app-bar-nav-icon>
+          <v-toolbar-title>欢迎：{{ user.name }}</v-toolbar-title>
+        </v-app-bar>
         <v-row>
           <v-col cols="0">
             <v-navigation-drawer
@@ -43,6 +41,7 @@ const tabIndex = ref(1);
               transition="none"
               :permanent="isPermanent"
               v-model="isShowNav"
+              class="py-3"
             >
               <v-tabs v-model="tabIndex" direction="vertical">
                 <v-tab v-for="(item, i) in items" :key="i" :value="i">
@@ -61,10 +60,7 @@ const tabIndex = ref(1);
                 </v-card>
               </v-window-item>
               <v-window-item :value="1">
-                <v-card>
-                  <v-card-title>个人信息</v-card-title>
-                  <v-card-text>个人信息</v-card-text>
-                </v-card>
+                <MemberWindow />
               </v-window-item>
               <v-window-item :value="2">
                 <v-card>
