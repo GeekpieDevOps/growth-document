@@ -11,8 +11,6 @@ import (
 func Mount(r *gin.RouterGroup, db *gorm.DB) {
 	r.Use(corsMiddleware())
 
-	r.POST("/", Hello(db))
-
 	v1.Mount(r.Group("/v1"), db)
 }
 
