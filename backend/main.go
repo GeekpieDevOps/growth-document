@@ -14,17 +14,6 @@ import (
 	"gorm.io/gorm"
 )
 
-func setupRouter(db *gorm.DB) *gin.Engine {
-	r := gin.New()
-
-	r.Use(slogGin.New(slog.Default()))
-	r.Use(gin.Recovery())
-
-	api.Mount(r.Group("/api"), db)
-
-	return r
-}
-
 func main() {
 	dsn := os.Getenv("GD_DSN")
 	if dsn == "" {
@@ -48,4 +37,15 @@ func main() {
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func setupRouter(db *gorm.DB) *gin.Engine {
+	r := gin.New()
+
+	r.Use(slogGin.New(slog.Default()))
+	r.Use(gin.Recovery())
+
+	api.Mount(r.Group("/api"), db)
+
+	return r
 }
