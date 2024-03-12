@@ -28,7 +28,7 @@ func setupRouter(db *gorm.DB) *gin.Engine {
 func main() {
 	dsn := os.Getenv("GD_DSN")
 	if dsn == "" {
-		slog.Error("environment variable DSN is not set")
+		slog.Error("environment variable GD_DSN is not set")
 		os.Exit(1)
 	}
 
