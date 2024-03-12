@@ -21,22 +21,30 @@ func main() {
 		os.Exit(1)
 	}
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: slogGorm.New(),
-	})
-
+	db, err := setupPostgres(dsn)
 	if err != nil {
 		// error already logged above
 		os.Exit(1)
 	}
 
-	db.AutoMigrate(&models.User{})
-
-	r := setupRouter(db)
-
-	if err := r.Run(); err != nil {
+	if err := setupRouter(db).Run(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func setupPostgres(dsn string) (*gorm.DB, error) {
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: slogGorm.New(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if err := db.AutoMigrate(&models.User{}); err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
 
 func setupRouter(db *gorm.DB) *gin.Engine {
