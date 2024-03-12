@@ -21,6 +21,13 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+    strategy:
+      matrix:
+        include:
+          - drv: postgres
+            dsn: postgresql://postgres:123456@localhost:5432/postgres
+          - drv: sqlite
+            dsn: data.db
     defaults:
       run:
         working-directory: ./backend
@@ -38,4 +45,5 @@ jobs:
     - name: Test
       run: go test -v ./...
       env:
-        GD_DSN: postgresql://postgres:123456@localhost:5432/postgres
+        GD_DRV: ${{ matrix.drv }}
+        GD_DSN: ${{ matrix.dsn }}
