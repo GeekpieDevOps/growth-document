@@ -140,35 +140,6 @@ func main() {
 		panic("Failed to connect to database")
 	}
 	fmt.Println("Successfully connected to database")
-	// 准备创建表的SQL语句
-	createTableStmt := `
-    	CREATE TABLE IF NOT EXISTS userss (
-        	id SERIAL PRIMARY KEY,
-        	email TEXT NOT NULL,
-        	password TEXT NOT NULL,
-        	nickname TEXT NOT NULL
-        )
-    `
-	// 执行SQL语句
-	result := db.Exec(createTableStmt)
-	if result.Error != nil {
-		fmt.Println("执行SQL语句失败:", result.Error)
-		return
-	}
-	fmt.Println("表创建成功")
-	tableName := "userss"
-
-	// 查询列名
-	var columns []string
-	result = db.Raw("SELECT column_name FROM information_schema.columns WHERE table_name = ?", tableName).Scan(&columns)
-	if result.Error != nil {
-		fmt.Println("查询列名失败:", result.Error)
-		return
-	}
-	fmt.Println("表", tableName, "的列名:")
-	for _, columnName := range columns {
-		fmt.Println(columnName)
-	}
 
 	db.AutoMigrate(&User{})
 
