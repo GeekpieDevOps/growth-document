@@ -103,8 +103,6 @@ func setupRouter(db *gorm.DB) *gin.Engine {
 
 	r.Use(corsMiddleware())
 
-	// r.POST("/your-endpoint", YourHandler)
-
 	r.POST("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Hello, World!",
@@ -158,19 +156,3 @@ func corsMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
-
-/*func YourHandler(c *gin.Context) {
-	// 读取请求体中的数据
-	body, err := ioutil.ReadAll(c.Request.Body)
-
-	if err != nil {
-		// 处理读取请求体错误
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read request body"})
-		return
-	}
-
-	// 打印请求体中的数据
-	fmt.Println("string(body)")
-	fmt.Println(body)
-	// 其他处理逻辑...
-}写的貌似有问题，暂时弃用*/
