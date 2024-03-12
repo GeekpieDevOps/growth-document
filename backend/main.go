@@ -2,17 +2,23 @@ package main
 
 import (
 	"log"
+	"log/slog"
 	"os"
 
 	"github.com/GeekpieDevOps/growth-document/backend/api"
 	"github.com/GeekpieDevOps/growth-document/backend/models"
 	"github.com/gin-gonic/gin"
+	slogGorm "github.com/orandin/slog-gorm"
+	sloggin "github.com/samber/slog-gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func setupRouter(db *gorm.DB) *gin.Engine {
-	r := gin.Default()
+func setupRouter(logger *slog.Logger, db *gorm.DB) *gin.Engine {
+	r := gin.New()
+
+	r.Use(sloggin.New(logger))
+	r.Use(gin.Recovery())
 
 	api.Mount(r.Group("/api"), db)
 
@@ -20,19 +26,28 @@ func setupRouter(db *gorm.DB) *gin.Engine {
 }
 
 func main() {
+	logger := slog.Default()
+
 	dsn := os.Getenv("GD_DSN")
 	if dsn == "" {
-		log.Fatal("ERROR: Couldn't connect to database: environment variable DSN is not set")
+		logger.Error("environment variable DSN is not set")
+		os.Exit(1)
 	}
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: slogGorm.New(
+			slogGorm.WithLogger(logger),
+		),
+	})
+
 	if err != nil {
-		log.Fatal("ERROR: Couldn't connect to database: ", err)
+		// error already logged above
+		os.Exit(1)
 	}
 
 	db.AutoMigrate(&models.User{})
 
-	r := setupRouter(db)
+	r := setupRouter(logger, db)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
