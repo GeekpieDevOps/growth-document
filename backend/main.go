@@ -32,8 +32,7 @@ func main() {
 
 	r := setupRouter(db)
 
-	err = r.Run()
-	if err != nil {
+	if err := r.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
