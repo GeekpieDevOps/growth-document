@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/GeekpieDevOps/growth-document/backend/api"
 	"github.com/GeekpieDevOps/growth-document/backend/models"
@@ -14,12 +13,6 @@ import (
 
 func setupRouter(db *gorm.DB) *gin.Engine {
 	r := gin.Default()
-
-	r.POST("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello, World!",
-		})
-	})
 
 	api.Mount(r.Group("/api"), db)
 
