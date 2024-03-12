@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"log/slog"
 	"os"
 
@@ -14,13 +15,7 @@ import (
 )
 
 func main() {
-	dsn := os.Getenv("GD_DSN")
-	if dsn == "" {
-		slog.Error("environment variable GD_DSN is not set")
-		os.Exit(1)
-	}
-
-	db, err := setupPostgres(dsn)
+	db, err := setupPostgres()
 	if err != nil {
 		// errors are already logged
 		os.Exit(1)
@@ -32,7 +27,14 @@ func main() {
 	}
 }
 
-func setupPostgres(dsn string) (*gorm.DB, error) {
+func setupPostgres() (*gorm.DB, error) {
+	dsn := os.Getenv("GD_DSN")
+	if dsn == "" {
+		err := errors.New("environment variable GD_DSN is empty or not set")
+		slog.Error(err.Error())
+		return nil, err
+	}
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: slogGorm.New(),
 	})
