@@ -37,3 +37,5 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+      env:
+        GD_DSN: postgresql://postgres:123456@localhost:5432/postgres
