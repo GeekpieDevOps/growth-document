@@ -11,11 +11,12 @@ import (
 	slogGorm "github.com/orandin/slog-gorm"
 	slogGin "github.com/samber/slog-gin"
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 func main() {
-	db, err := setupPostgres()
+	db, err := setupDatabase()
 	if err != nil {
 		// errors are already logged
 		os.Exit(1)
@@ -27,26 +28,41 @@ func main() {
 	}
 }
 
-func setupPostgres() (*gorm.DB, error) {
+func setupDatabase() (db *gorm.DB, err error) {
 	dsn := os.Getenv("GD_DSN")
 	if dsn == "" {
-		err := errors.New("environment variable GD_DSN is empty or not set")
+		err = errors.New("environment variable GD_DSN is empty or not set")
 		slog.Error(err.Error())
-		return nil, err
+		return
 	}
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	var dialector gorm.Dialector
+	switch os.Getenv("GD_DRV") {
+	case "":
+		slog.Warn("environment variable GD_DRV is empty or not set, defaulting to SQLite")
+		fallthrough
+	case "sqlite":
+		dialector = sqlite.Open(dsn)
+	case "postgres":
+		dialector = postgres.Open(dsn)
+	default:
+		err = errors.New("environment variable GD_DRV has invalid value, should be one of `sqlite' or `postgres'")
+		slog.Error(err.Error())
+		return
+	}
+
+	db, err = gorm.Open(dialector, &gorm.Config{
 		Logger: slogGorm.New(),
 	})
 	if err != nil {
+		return
+	}
+
+	if err = db.AutoMigrate(&models.User{}); err != nil {
 		return nil, err
 	}
 
-	if err := db.AutoMigrate(&models.User{}); err != nil {
-		return nil, err
-	}
-
-	return db, nil
+	return
 }
 
 func setupRouter(db *gorm.DB) *gin.Engine {
