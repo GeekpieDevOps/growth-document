@@ -9,9 +9,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - drv: postgres
+            dsn: postgresql://postgres:123456@localhost:5432/postgres
+          - drv: sqlite
+            dsn: data.db
     services:
       postgres:
-        image: postgres
+        image: ${{ matrix.drv == 'postgres' && 'postgres' || '' }}
         env:
           POSTGRES_PASSWORD: 123456
         ports:
@@ -21,13 +28,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    strategy:
-      matrix:
-        include:
-          - drv: postgres
-            dsn: postgresql://postgres:123456@localhost:5432/postgres
-          - drv: sqlite
-            dsn: data.db
     defaults:
       run:
         working-directory: ./backend
