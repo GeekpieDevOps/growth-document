@@ -20,7 +20,7 @@ func setupRouter(db *gorm.DB) *gin.Engine {
 }
 
 func main() {
-	dsn := os.Getenv("DSN")
+	dsn := os.Getenv("GD_DSN")
 	if dsn == "" {
 		log.Fatal("ERROR: Couldn't connect to database: environment variable DSN is not set")
 	}

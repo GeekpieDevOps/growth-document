@@ -2,7 +2,7 @@
 
 ```sh
 go build github.com/GeekpieDevOps/growth-document/backend
-env DSN="host=localhost user=postgres password=yourpassword dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai" ./backend
+env GD_DSN="host=localhost user=postgres password=yourpassword dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai" ./backend
 ```
 
 To temporarily start postgresql server:
