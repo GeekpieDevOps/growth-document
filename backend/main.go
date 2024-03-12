@@ -14,10 +14,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func setupRouter(logger *slog.Logger, db *gorm.DB) *gin.Engine {
+func setupRouter(db *gorm.DB) *gin.Engine {
 	r := gin.New()
 
-	r.Use(slogGin.New(logger))
+	r.Use(slogGin.New(slog.Default()))
 	r.Use(gin.Recovery())
 
 	api.Mount(r.Group("/api"), db)
@@ -26,18 +26,14 @@ func setupRouter(logger *slog.Logger, db *gorm.DB) *gin.Engine {
 }
 
 func main() {
-	logger := slog.Default()
-
 	dsn := os.Getenv("GD_DSN")
 	if dsn == "" {
-		logger.Error("environment variable DSN is not set")
+		slog.Error("environment variable DSN is not set")
 		os.Exit(1)
 	}
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: slogGorm.New(
-			slogGorm.WithLogger(logger),
-		),
+		Logger: slogGorm.New(),
 	})
 
 	if err != nil {
@@ -47,7 +43,7 @@ func main() {
 
 	db.AutoMigrate(&models.User{})
 
-	r := setupRouter(logger, db)
+	r := setupRouter(db)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
