@@ -8,10 +8,10 @@ import (
 	"github.com/GeekpieDevOps/growth-document/backend/api"
 	"github.com/GeekpieDevOps/growth-document/backend/models"
 	"github.com/gin-gonic/gin"
+	"github.com/glebarez/sqlite"
 	slogGorm "github.com/orandin/slog-gorm"
 	slogGin "github.com/samber/slog-gin"
 	"gorm.io/driver/postgres"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
