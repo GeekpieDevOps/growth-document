@@ -102,7 +102,6 @@ func setupRouter(db *gorm.DB) *gin.Engine {
 }
 
 func main() {
-	// 临时数据库启动命令(Docker): docker run -id --name=postgres-test -v postgre-data:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_PASSWORD=123456 -e LANG=C.UTF-8 postgres
 	dsn := "host=localhost user=postgres password=yourpassword dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai" //postgres 是 PostgreSQL 的默认用户名和数据库名称
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})                                                                     //"   "应该填链接，由于我不知道postgres的链接形式，所以这里只是一个示例
 	if err != nil {
