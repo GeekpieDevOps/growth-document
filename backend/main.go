@@ -9,7 +9,7 @@ import (
 	"github.com/GeekpieDevOps/growth-document/backend/models"
 	"github.com/gin-gonic/gin"
 	slogGorm "github.com/orandin/slog-gorm"
-	sloggin "github.com/samber/slog-gin"
+	slogGin "github.com/samber/slog-gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -17,7 +17,7 @@ import (
 func setupRouter(logger *slog.Logger, db *gorm.DB) *gin.Engine {
 	r := gin.New()
 
-	r.Use(sloggin.New(logger))
+	r.Use(slogGin.New(logger))
 	r.Use(gin.Recovery())
 
 	api.Mount(r.Group("/api"), db)
