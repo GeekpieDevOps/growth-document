@@ -79,25 +79,6 @@ func UpdateUser(c *gin.Context, db *gorm.DB) {
 	c.JSON(http.StatusOK, response)
 }
 
-func DeleteUser(c *gin.Context, db *gorm.DB) {
-	id := c.Param("id")
-
-	var user User
-	result := db.First(&user, id)
-	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"code": 500, "message": "User not found"})
-		return
-	}
-
-	result = db.Delete(&user)
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "Failed to delete user"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"code": 200, "message": "User deleted successfully"})
-}
-
 func setupRouter(db *gorm.DB) *gin.Engine {
 	r := gin.Default()
 
@@ -115,10 +96,6 @@ func setupRouter(db *gorm.DB) *gin.Engine {
 
 	r.PUT("/api/v1/update", func(c *gin.Context) {
 		UpdateUser(c, db)
-	})
-
-	r.DELETE("/api/v1/delete", func(c *gin.Context) {
-		DeleteUser(c, db)
 	})
 
 	return r
