@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/GeekpieDevOps/growth-document/backend/api"
 	"github.com/GeekpieDevOps/growth-document/backend/models"
@@ -19,8 +20,11 @@ func setupRouter(db *gorm.DB) *gin.Engine {
 }
 
 func main() {
-	// FIXME: default user name and database name is used here
-	dsn := "host=localhost user=postgres password=yourpassword dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	dsn := os.Getenv("DSN")
+	if dsn == "" {
+		log.Fatal("ERROR: Couldn't connect to database: environment variable DSN is not set")
+	}
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("Failed to connect to database")
