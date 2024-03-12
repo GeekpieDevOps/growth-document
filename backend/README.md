@@ -1,11 +1,17 @@
 # Backend
 
+To build and run the server:
 ```sh
-go build github.com/GeekpieDevOps/growth-document/backend
-env GD_DSN="host=localhost user=postgres password=yourpassword dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai" ./backend
+go build .
+env GD_DSN="postgresql://postgres:123456@localhost:5432/postgres" ./backend
 ```
 
-To temporarily start postgresql server:
+To test:
 ```sh
-docker run -id --name=postgres-test -v postgre-data:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_PASSWORD=123456 -e LANG=C.UTF-8 postgres
+go test -v ./...
+```
+
+To start PostgreSQL server with docker or podman:
+```sh
+docker run -name postgres-test -d -e POSTGRES_PASSWORD=123456 -p 5432:5432 docker.io/library/postgres
 ```
