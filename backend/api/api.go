@@ -7,5 +7,5 @@ import (
 )
 
 func Mount(r *gin.RouterGroup, db *gorm.DB) {
-	v1.Mount(r, db)
+	v1.Mount(r.Group("/v1"), db)
 }
