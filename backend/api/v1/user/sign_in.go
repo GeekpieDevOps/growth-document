@@ -64,17 +64,32 @@ func SignIn(db *gorm.DB) func(c *gin.Context) {
 			}
 		}
 
+		// Allocate token ID
+		id := uuid.New()
+
 		// Create a session token
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
 			Subject:  constant.JWTSubjectAuthentication.String(),
 			Audience: jwt.ClaimStrings{user.UUID.String()},
-			ID:       uuid.New().String(),
+			ID:       id.String(),
 		})
 
 		// Sign it with user's nonce
 		signedToken, err := token.SignedString(user.Nonce)
 		if err != nil {
 			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+
+		result = db.Create(&models.Token{
+			ID:    id,
+			UUID:  user.UUID,
+			Nonce: user.Nonce,
+			Token: signedToken,
+		})
+		if result.Error != nil {
+			// Can't handle this, so abort
+			c.AbortWithError(http.StatusInternalServerError, result.Error)
 			return
 		}
 
