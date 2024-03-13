@@ -14,6 +14,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// SignInRequest contains fields for an sign in request.
 type SignInRequest struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required"`
