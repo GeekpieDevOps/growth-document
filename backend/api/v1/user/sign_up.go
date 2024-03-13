@@ -19,6 +19,7 @@ type SignUpRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
+// SignUpResponse specifies response fields for a successful sign up.
 type SignUpResponse struct {
 	UUID uuid.UUID `json:"uuid" binding:"required,uuid"`
 }
