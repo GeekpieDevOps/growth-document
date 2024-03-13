@@ -12,8 +12,6 @@
 - node_modules
 - public
 - src
-  - asserts
-    _Used to put the static files, like css, img_
   - components
     _Used to put the .vue components, which can be used repeatedly._
   - hooks

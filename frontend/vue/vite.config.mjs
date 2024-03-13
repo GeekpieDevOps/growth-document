@@ -46,6 +46,7 @@ export default defineConfig({
         login: resolve(__dirname, "login.html"),
         signup: resolve(__dirname, "signup.html"),
         member: resolve(__dirname, "member.html"),
+        settings: resolve(__dirname, "settings.html"),
       },
     },
   },

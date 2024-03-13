@@ -54,8 +54,8 @@
         ></v-row>
       </v-form>
     </v-card-text>
-    <v-overlay :model-value="isMistake" class="align-center justify-center">
-      <v-alert type="warning" title="登陆失败" closable></v-alert> </v-overlay
+    <v-dialog :model-value="isMistake" max-width="450">
+      <v-alert type="warning" title="登陆失败" closable></v-alert> </v-dialog
   ></v-card>
 </template>
 
