@@ -1,3 +1,4 @@
+// Package api contains handlers for all APIs.
 package api
 
 import (
