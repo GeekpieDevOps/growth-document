@@ -20,7 +20,8 @@ type SignInRequest struct {
 }
 
 type SignInResponse struct {
-	Token string `json:"token" binding:"required,jwt"`
+	Token string    `json:"token" binding:"required,jwt"`
+	UUID  uuid.UUID `json:"uuid" binding:"required,uuid"`
 }
 
 func SignIn(db *gorm.DB) func(c *gin.Context) {
@@ -66,6 +67,7 @@ func SignIn(db *gorm.DB) func(c *gin.Context) {
 
 		c.JSON(http.StatusOK, SignInResponse{
 			Token: signedToken,
+			UUID:  user.UUID,
 		})
 	}
 }
