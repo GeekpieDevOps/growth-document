@@ -1,3 +1,4 @@
+// Package user contains implementaions for the /api/v1/user API family.
 package user
 
 import (
