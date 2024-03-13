@@ -26,10 +26,14 @@ type SignInResponse struct {
 	UUID  uuid.UUID `json:"uuid" binding:"required,uuid"`
 }
 
+// SignIn is the handler for /api/v1/user/sign_in.
 func SignIn(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var req SignInRequest
+
+		// Parse request payload
 		if err := c.ShouldBindJSON(&req); err != nil {
+			// Inform the client about invalid fields
 			if v, ok := err.(validator.ValidationErrors); ok {
 				c.AbortWithStatusJSON(http.StatusBadRequest,
 					lo.Map(v, func(f validator.FieldError, _ int) string {
@@ -39,28 +43,35 @@ func SignIn(db *gorm.DB) func(c *gin.Context) {
 				return
 			}
 
+			// Can't handle this, so abort
 			c.AbortWithStatus(http.StatusBadRequest)
 			return
 		}
 
 		var user models.User
+
+		// Check if provided information are correct
 		result := db.Where("email = ? AND password = ?", req.Email, req.Password).First(&user)
 		if result.Error != nil {
+			// User doesn't exist
 			if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 				c.AbortWithStatus(http.StatusUnauthorized)
 				return
 			} else {
+				// Can't handle this, so abort
 				c.AbortWithError(http.StatusInternalServerError, result.Error)
 				return
 			}
 		}
 
+		// Create a session token
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
 			Subject:  constant.JWTSubjectAuthentication.String(),
 			Audience: jwt.ClaimStrings{user.UUID.String()},
 			ID:       uuid.New().String(),
 		})
 
+		// Sign it with user's nonce
 		signedToken, err := token.SignedString(user.Nonce)
 		if err != nil {
 			c.AbortWithError(http.StatusInternalServerError, err)
