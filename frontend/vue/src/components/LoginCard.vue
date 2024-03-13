@@ -69,7 +69,6 @@ const showPwd = ref(false);
 const isLoading = ref(false);
 const { name } = useDisplay();
 const getViewPointName = computed(() => {
-  console.log(name.value);
   return name.value;
 });
 const isMistake = ref(false);
@@ -113,6 +112,7 @@ function loginSubmit() {
   fetchPromis
     .then((response) => {
       isLoading.value = false;
+      console.log("hello");
       return response.json();
     })
     .then((json) => {

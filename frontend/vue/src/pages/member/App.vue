@@ -35,7 +35,7 @@ const tabIndex = ref(1);
         <v-row>
           <v-col cols="0">
             <v-navigation-drawer
-              color="blue"
+              color="blue-lighten-1"
               dark
               location="left"
               transition="none"
@@ -44,7 +44,12 @@ const tabIndex = ref(1);
               class="py-3"
             >
               <v-tabs v-model="tabIndex" direction="vertical">
-                <v-tab v-for="(item, i) in items" :key="i" :value="i">
+                <v-tab
+                  v-for="(item, i) in items"
+                  :key="i"
+                  :value="i"
+                  class="my-2"
+                >
                   <v-icon start>{{ item.icon }}</v-icon>
 
                   <v-list-item-title v-text="item.text"></v-list-item-title>
