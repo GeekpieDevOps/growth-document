@@ -24,8 +24,13 @@ import (
 )
 
 func main() {
-	db, err := setupDatabase()
+	db, err := openDatabase()
 	if err != nil {
+		// errors are already logged
+		os.Exit(1)
+	}
+
+	if err := models.AutoMigrate(db); err != nil {
 		// errors are already logged
 		os.Exit(1)
 	}
@@ -36,7 +41,7 @@ func main() {
 	}
 }
 
-func setupDatabase() (db *gorm.DB, err error) {
+func openDatabase() (db *gorm.DB, err error) {
 	dsn := os.Getenv("GD_DSN")
 	if dsn == "" {
 		err = errors.New("environment variable GD_DSN is empty or not set")
@@ -62,13 +67,6 @@ func setupDatabase() (db *gorm.DB, err error) {
 	db, err = gorm.Open(dialector, &gorm.Config{
 		Logger: slogGorm.New(),
 	})
-	if err != nil {
-		return
-	}
-
-	if err = db.AutoMigrate(&models.User{}); err != nil {
-		return nil, err
-	}
 
 	return
 }
