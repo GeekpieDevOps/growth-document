@@ -1,3 +1,11 @@
+// Package main contains the program entry point.
+//
+// Behaviors of the program can be configured
+// by the following environment variables:
+//   - GD_DRV: database engine to use. Valid values are
+//     sqlite for SQLite and postgres for PostgreSQL.
+//   - GD_DSN: specifies which database to use. The exact format depends on the
+//     database engine used.
 package main
 
 import (
