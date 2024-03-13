@@ -1,6 +1,7 @@
 package user
 
 import (
+	"crypto/rand"
 	"errors"
 	"net/http"
 
@@ -48,12 +49,20 @@ func SignUp(db *gorm.DB) func(c *gin.Context) {
 			return
 		}
 
+		nonce := make([]byte, 16)
+		_, err := rand.Read(nonce)
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+
 		user = models.User{
 			UUID:     uuid.New(),
 			ID:       "",
 			Email:    req.Email,
 			Password: req.Password,
 			Nickname: "",
+			Nonce:    nonce,
 		}
 
 		result = db.Create(&user)
