@@ -19,7 +19,7 @@ type SignUpRequest struct {
 }
 
 type SignUpResponse struct {
-	UUID uuid.UUID
+	UUID uuid.UUID `json:"uuid" binding:"required,uuid"`
 }
 
 func SignUp(db *gorm.DB) func(c *gin.Context) {
@@ -72,7 +72,7 @@ func SignUp(db *gorm.DB) func(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, SignUpResponse{
-			user.UUID,
+			UUID: user.UUID,
 		})
 	}
 }
