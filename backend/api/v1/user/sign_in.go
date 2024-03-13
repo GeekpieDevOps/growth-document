@@ -20,6 +20,7 @@ type SignInRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
+// SignInResponse specifies response fields for a successful sign in.
 type SignInResponse struct {
 	Token string    `json:"token" binding:"required,jwt"`
 	UUID  uuid.UUID `json:"uuid" binding:"required,uuid"`
