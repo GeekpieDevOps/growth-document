@@ -1,3 +1,4 @@
+// Package v1 contains implementaions of API version v1.
 package v1
 
 import (
