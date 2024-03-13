@@ -35,11 +35,11 @@ func SignIn(db *gorm.DB) func(c *gin.Context) {
 		if err := c.ShouldBindJSON(&req); err != nil {
 			// Inform the client about invalid fields
 			if v, ok := err.(validator.ValidationErrors); ok {
-				c.AbortWithStatusJSON(http.StatusBadRequest,
-					lo.Map(v, func(f validator.FieldError, _ int) string {
+				c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+					"fields": lo.Map(v, func(f validator.FieldError, _ int) string {
 						return f.Field()
 					}),
-				)
+				})
 				return
 			}
 
