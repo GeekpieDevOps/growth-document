@@ -4,9 +4,12 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/GeekpieDevOps/growth-document/backend/api/v1/constant"
 	"github.com/GeekpieDevOps/growth-document/backend/models"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
 )
@@ -14,6 +17,10 @@ import (
 type SignInRequest struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required"`
+}
+
+type SignInResponse struct {
+	Token string `json:"token" binding:"required,jwt"`
 }
 
 func SignIn(db *gorm.DB) func(c *gin.Context) {
@@ -45,7 +52,20 @@ func SignIn(db *gorm.DB) func(c *gin.Context) {
 			}
 		}
 
-		// TODO
-		c.AbortWithStatus(http.StatusNotImplemented)
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
+			Subject:  constant.JWTSubjectAuthentication.String(),
+			Audience: jwt.ClaimStrings{user.UUID.String()},
+			ID:       uuid.New().String(),
+		})
+
+		signedToken, err := token.SignedString(user.Nonce)
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+
+		c.JSON(http.StatusOK, SignInResponse{
+			Token: signedToken,
+		})
 	}
 }
