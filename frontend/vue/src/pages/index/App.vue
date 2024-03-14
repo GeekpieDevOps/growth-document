@@ -1,5 +1,6 @@
 <template>
-  <v-app  class="indigo-darken-3">
+  <v-app  class="bg-pink-lighten-5">
+    <v-main>
     <IndexNav></IndexNav>
 
     <v-container fluid color="#2b3447">
@@ -47,9 +48,10 @@
 
     <v-container class="mt-12"></v-container>
     <v-container class="mt-12"></v-container>
-    <v-container class="mt-12">
+    <div class="bg-blue-lighten-5">
+    <v-container class="mt-12 ">
       <v-row justify="center" align="center" class="flex-container mb-6" >
-        <v-chip variant="elevated">
+        <v-chip variant="elevated" class="mt-12">
           Colorful Life
         </v-chip>
       </v-row>
@@ -65,8 +67,92 @@
         </v-col>
       </v-row>
     </v-container>
+  </div>
     <v-container class="mt-12"></v-container>
-    <v-container class="mt-12"></v-container>
+
+
+
+    <v-container class="mt-2">
+      <v-row justify="center">
+    
+    
+        <v-card
+    class="mx-auto"
+    max-width="500"
+  >
+    <v-container fluid>
+      <v-row dense>
+        <v-col
+          v-for="card in cards"
+          :key="card.title"
+          :cols="card.flex"
+        >
+          <v-card>
+            <v-img
+              :src="card.src"
+              class="align-end"
+              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+              height="200px"
+              cover
+            >
+              <v-card-title class="text-white" v-text="card.title"></v-card-title>
+            </v-img>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn color="surface-variant" icon="mdi-heart" size="small" variant="text"></v-btn>
+
+              <v-btn color="surface-variant" icon="mdi-bookmark" size="small" variant="text"></v-btn>
+
+              <v-btn color="surface-variant" icon="mdi-share-variant" size="small" variant="text"></v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
+
+
+  <v-card
+    class="mx-auto"
+    max-width="500"
+  >
+    <v-container fluid>
+      <v-row dense>
+        <v-col
+          v-for="card in cards"
+          :key="card.title"
+          :cols="card.flex"
+        >
+          <v-card>
+            <v-img
+              :src="card.src"
+              class="align-end"
+              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+              height="200px"
+              cover
+            >
+              <v-card-title class="text-white" v-text="card.title"></v-card-title>
+            </v-img>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn color="surface-variant" icon="mdi-heart" size="small" variant="text"></v-btn>
+
+              <v-btn color="surface-variant" icon="mdi-bookmark" size="small" variant="text"></v-btn>
+
+              <v-btn color="surface-variant" icon="mdi-share-variant" size="small" variant="text"></v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
+</v-row>
+</v-container>
+
       <v-container class="text-center mt-12">
           <h2 class="display-2 font-weight-bold mb-3">VUETIFY FEATURES</h2>
 
@@ -152,6 +238,84 @@
     <v-container class="mt-12"></v-container>    <v-container class="mt-12"></v-container>
     <v-container class="mt-12"></v-container>    <v-container class="mt-12"></v-container>
     <v-container class="mt-12"></v-container>
+
+
+
+
+    <!-- <v-container class="mt-12 bg-c blue-accent-2 height=10vh"></v-container>  -->
+    <!-- <div class="bg-blue-lighten-3" >
+      <v-container class="mt-12"  >
+        <v-row >
+          <v-col class="align-start">
+            
+          <v-container class="mt-12"></v-container>  
+          <v-sheet class="bg-blue-lighten-3 text-center" >
+            <p style="font-size: 40px; color: white" class="mb-6">欢迎光临我们的书院 </p>
+            <p style="font-size: 30px; color: white">欢迎光临我们的书院 </p>
+            <v-container class="mt-12"></v-container>
+          </v-sheet>
+          </v-col>
+          <v-col >
+            <img src="../../../public/imgs/tower.svg" alt="Welcome to our college" height="100vh">
+        </v-col>
+
+        </v-row>
+      </v-container>
+    </div> -->
+
+    <!-- <v-content>
+  <v-container>
+    <v-row 
+           align="right" 
+           align-content="right" 
+           class="text-right"
+           >
+      <v-col class="text-right">
+        <v-img 
+               max-height="200px" 
+               max-width="200px"
+               src="https://picsum.photos/200/300"
+               align="right"
+               ></v-img>
+      </v-col>
+    </v-row>  
+  </v-container>
+</v-content>
+
+
+    <v-container class="mt-12"></v-container>  <v-container class="mt-12"></v-container>  <v-container class="mt-12"></v-container> -->
+
+
+  <v-footer
+    class="bg-indigo-lighten-1 text-center d-flex flex-column"
+  >
+    <div>
+      <v-btn
+        v-for="icon in footer_icons"
+        :key="icon"
+        icon
+        class="mx-4 mb-4 mt-4"
+        variant="text"
+       
+      ><img :src="icon" width="50px"></v-btn>
+    </div>
+
+    <div class="pt-0">
+      Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+    </div>
+    <div>
+      And thanks for our team!
+    </div>
+    <v-btn>
+      <v-icon>mdi-arrow-up-bold</v-icon>
+    </v-btn>
+
+    <v-divider></v-divider>
+
+
+  </v-footer>
+
+</v-main>
   </v-app>
 </template>
 
@@ -186,6 +350,25 @@
           ['1m', 'Downloads/mo'],
           ['5m', 'Total Downloads'],
         ],
+
+      cards: [
+        {
+          title: 'Pre-fab homes',
+          src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
+          flex: 12,
+        },
+        {
+          title: 'Favorite road trips',
+          src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
+          flex: 6,
+        },
+        {
+          title: 'Best airlines',
+          src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
+          flex: 6,
+        },
+      ],
+        footer_icons:["../../../public/imgs/大道书院.png","../../../public/imgs/科道书院.png","../../../public/imgs/上道书院.png"]
     })
 
   }
