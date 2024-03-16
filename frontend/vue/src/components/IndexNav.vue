@@ -50,7 +50,7 @@
       </v-list>
     </v-menu>
 
-    <v-btn color="blue" rounded="XL" > <strong>登录/注册</strong></v-btn>
+    <v-btn color="blue" rounded="XL" @click="registerButton"> <strong>登录/注册</strong></v-btn>
 
     <v-menu  rounded>
         <template v-slot:activator="{ props }">
@@ -101,6 +101,9 @@
     methods: {
       goToProfile() {
         window.location.href = 'https://www.baidu.com';
+      },
+      registerButton() {
+        window.location.href = '../login.html';
       },
     },
   }
