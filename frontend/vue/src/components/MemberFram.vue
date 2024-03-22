@@ -127,8 +127,8 @@ const profileMenu = [
   },
   {
     title: "我的提交",
-    subtitle: "checking my submit",
-    icon: "mdi-calendar-check",
+    subtitle: "Checking my submit",
+    icon: "mdi-send",
     url: "#",
   },
 ];

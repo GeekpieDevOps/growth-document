@@ -86,51 +86,13 @@
                       ></template
                     >
                     <template v-slot:default="{ isActive }">
-                      <v-card
-                        class="pa-7 rounded-lg d-flex flex-column align-center"
-                        color="#5d87ff"
-                      >
-                        <v-row
-                          ><v-col
-                            ><v-card-title class="text-h6"
-                              ><v-icon class="mr-3" prepend
-                                >mdi-information</v-icon
-                              >确认重置？</v-card-title
-                            ></v-col
-                          ></v-row
-                        >
-                        <v-row
-                          ><v-col>
-                            <v-card-text class="text-h6"
-                              >重置后将无法撤回！</v-card-text
-                            ></v-col
-                          ></v-row
-                        >
-                        <v-row class="align-self-stretch">
-                          <v-spacer></v-spacer>
-                          <v-col cols="4">
-                            <v-btn
-                              width="80"
-                              text
-                              @click="isActive.value = false"
-                              variant="flat"
-                              >取消</v-btn
-                            ></v-col
-                          >
-                          <v-spacer></v-spacer
-                          ><v-col
-                            ><v-btn
-                              width="80"
-                              cols="4"
-                              text
-                              @click="isActive.value = false"
-                              variant="flat"
-                              >重置</v-btn
-                            ></v-col
-                          >
-                          <v-spacer></v-spacer
-                        ></v-row>
-                      </v-card>
+                      <Alert
+                        title="确认重置"
+                        text="重置后将无法撤回！"
+                        activeText="重置"
+                        :isActive="isActive"
+                        :active="resetImg"
+                      />
                     </template>
                   </v-dialog>
                 </v-row>
@@ -169,11 +131,22 @@
                   class="mt-3 mx-4"
                 ></v-text-field>
                 <v-col cols="12" class="d-flex justify-center">
-                  <v-btn color="#5d87ff" width="80">确认</v-btn></v-col
-                >
-              </v-card>
-            </v-col></v-row
-          >
+                  <v-dialog max-width="350" persistent
+                    ><template v-slot:activator="{ props: activatorProps }"
+                      ><v-btn color="#5d87ff" width="80" v-bind="activatorProps"
+                        >确认</v-btn
+                      >
+                    </template>
+                    <template v-slot:default="{ isActive }">
+                      <Alert
+                        title="确认修改"
+                        text="修改后将无法撤回！"
+                        activeText="修改"
+                        :isActive="isActive"
+                        :active="changePWD" /></template></v-dialog
+                ></v-col>
+              </v-card> </v-col
+          ></v-row>
           <v-row>
             <v-col>
               <v-card class="pa-4" elevation="2">
@@ -184,10 +157,7 @@
                 >
                   To change your password please confirm here
                 </p>
-                <v-form
-                  @submit.prevent="userInfoFormSubmit"
-                  @reset.prevent="userInfoFormRest"
-                >
+                <v-form @reset.prevent="userInfoFormRest">
                   <v-row>
                     <v-col cols="12" sm="6" v-for="(value, key) in accountInfo">
                       <v-card-subtitle class="text-subtitle-1">{{
@@ -209,22 +179,32 @@
                         v-if="value.options"
                         :items="value.options"
                       ></v-select> </v-col></v-row
-                  ><v-row class="d-flex justify-end mb-5">
-                    <v-spacer></v-spacer
-                    ><v-btn
-                      type="submit"
-                      class="mx-4"
-                      color="#5d87ff"
-                      width="80"
-                      v-bind="activatorProps"
-                      >修改</v-btn
+                  ><v-row class="d-flex justify-end align-center mb-5 mx-5">
+                    <v-spacer></v-spacer>
+                    <v-dialog max-width="350" persistent
+                      ><template v-slot:activator="{ props: activatorProps }"
+                        ><v-btn
+                          class="mx-4"
+                          color="#5d87ff"
+                          width="80"
+                          v-bind="activatorProps"
+                          >修改</v-btn
+                        ></template
+                      >
+                      <template v-slot:default="{ isActive }">
+                        <Alert
+                          title="确认修改"
+                          text="修改后将无法撤回！"
+                          activeText="修改"
+                          :isActive="isActive"
+                          :active="userInfoFormSubmit"
+                      /></template> </v-dialog
                     ><v-btn
                       type="reset"
                       class="mx-4"
                       color="rgb(250, 137, 107)"
                       variant="flat"
                       width="80"
-                      v-bind="activatorProps"
                       >还原</v-btn
                     ></v-row
                   ></v-form
@@ -237,29 +217,94 @@
     </v-window></v-card
   >
 </template>
-<script setup>
+<script>
 import { ref } from "vue";
-const tab = ref(1);
-const passwordModify = ref("");
-const passwordConfirm = ref("");
-const accountInfo = ref({
-  姓名: { content: "John Doe", disabled: false },
-  Email: { content: "1234.shanghai.edu.cn", disabled: true },
-  书院: {
-    content: "上道书院",
-    disabled: true,
-    options: ["上道书院", "科道书院", "大道书院"],
+export default {
+  name: "AccountWindow",
+
+  setup() {
+    const tab = ref(1);
+    const passwordModify = ref("");
+    const passwordConfirm = ref("");
+    const getAccountInfo = {
+      姓名: "John Doe",
+      Email: "1234.shanghai.edu.cn",
+      书院: "上道书院",
+      学院: "信息学院",
+    };
+    const accountInfo = ref({
+      姓名: { content: "", disabled: false },
+      Email: { content: "", disabled: true },
+      书院: {
+        content: "",
+        disabled: true,
+        options: ["上道书院", "科道书院", "大道书院"],
+      },
+      学院: {
+        content: "",
+        disabled: true,
+        options: ["信息学院", "数学所", "物质学院"],
+      },
+    });
+    const userInfoChangeState = ref("");
+    userInfoFormRest();
+
+    function resetImg() {
+      // fetch
+    }
+    function changePWD() {
+      // fetch
+    }
+    function checkUserInfoChange() {
+      let changeKeys = [];
+      for (let key in accountInfo.value) {
+        if (accountInfo.value[key].content !== getAccountInfo[key]) {
+          changeKeys.push(key);
+        }
+      }
+      return changeKeys;
+    }
+
+    function userInfoFormSubmit(isActive) {
+      let changeKeys = checkUserInfoChange();
+      if (changeKeys.length === 0) {
+        isActive.value = false;
+        return;
+      }
+      for (let key of changeKeys) {
+        fetch("http://127.0.0.1:4523/m1/4078973-0-default/api/v1/user/1", {
+          method: "PUT",
+          body: JSON.stringify({
+            token: "123456",
+            name: key,
+            value: accountInfo.value[key].content,
+          }),
+        }).then((res) => {
+          if (res.status === 200) {
+            getAccountInfo[key] = accountInfo.value[key].content;
+            isActive.value = false;
+          }
+        });
+      }
+    }
+
+    function userInfoFormRest() {
+      for (let key in accountInfo.value) {
+        accountInfo.value[key].content = getAccountInfo[key];
+      }
+    }
+    return {
+      tab,
+      passwordConfirm,
+      passwordModify,
+      accountInfo,
+      userInfoChangeState,
+      checkUserInfoChange,
+      userInfoFormRest,
+      userInfoFormSubmit,
+      resetImg,
+      changePWD,
+    };
   },
-  学院: {
-    content: "信息学院",
-    disabled: true,
-    options: ["信息学院", "数学所", "物质学院"],
-  },
-});
-function userInfoFormSubmit() {
-  console.log("submit");
-}
-function userInfoFormRest() {
-  accountInfo;
-}
+};
 </script>
