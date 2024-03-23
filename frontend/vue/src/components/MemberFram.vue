@@ -97,39 +97,57 @@
           ></v-hover
         >
         <v-row class="d-flex justify-end ma-3">
-          <v-btn color="blue-lighten-1" width="80">登出</v-btn></v-row
+          <v-btn color="blue-lighten-1" width="80" @click="signout"
+            >登出</v-btn
+          ></v-row
         ></v-card
       ></v-menu
     >
   </v-app-bar>
 </template>
-<script setup>
+<script>
 import { ref, computed } from "vue";
 import { useDisplay } from "vuetify/lib/framework.mjs";
-const { name } = useDisplay();
-const isPermanent = computed(() => {
-  return name.value === "sm" || name.value === "xs" ? false : true;
-});
-const showProfileMenu = ref(false);
-const isdraw = ref(name.value === "sm" || name.value === "xs" ? false : true);
-const profileMenu = [
-  {
-    title: "我的信息",
-    subtitle: "Setting my profile",
-    icon: "mdi-account-box",
-    url: "#",
+export default {
+  setup() {
+    const { name } = useDisplay();
+    const isPermanent = computed(() => {
+      return name.value === "sm" || name.value === "xs" ? false : true;
+    });
+    const showProfileMenu = ref(false);
+    const isdraw = ref(
+      name.value === "sm" || name.value === "xs" ? false : true
+    );
+    const profileMenu = [
+      {
+        title: "我的信息",
+        subtitle: "Setting my profile",
+        icon: "mdi-account-box",
+        url: "#",
+      },
+      {
+        title: "我的任务",
+        subtitle: "Checking my task",
+        icon: "mdi-calendar-check",
+        url: "#",
+      },
+      {
+        title: "我的提交",
+        subtitle: "Checking my submit",
+        icon: "mdi-send",
+        url: "#",
+      },
+    ];
+    function signout() {
+      fetch();
+    }
+    return {
+      isPermanent,
+      showProfileMenu,
+      isdraw,
+      profileMenu,
+      signout,
+    };
   },
-  {
-    title: "我的任务",
-    subtitle: "Checking my task",
-    icon: "mdi-calendar-check",
-    url: "#",
-  },
-  {
-    title: "我的提交",
-    subtitle: "Checking my submit",
-    icon: "mdi-send",
-    url: "#",
-  },
-];
+};
 </script>

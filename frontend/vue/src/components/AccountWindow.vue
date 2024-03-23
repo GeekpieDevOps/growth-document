@@ -272,14 +272,18 @@ export default {
         return;
       }
       for (let key of changeKeys) {
-        fetch("http://127.0.0.1:4523/m1/4078973-0-default/api/v1/user/1", {
-          method: "PUT",
-          body: JSON.stringify({
-            token: "123456",
-            name: key,
-            value: accountInfo.value[key].content,
-          }),
-        }).then((res) => {
+        fetch(
+          "http://10.20.235.113:8080/api/v1/user/6608eea3-ac62-41d3-af88-e55df834cb1c",
+          {
+            method: "PUT",
+            body: JSON.stringify({
+              token:
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjM2FjMTBkNy02NTI2LTQ2ODQtODZhOC03MDc0YTNlMGJkMzgiLCJhdWQiOlsiNjYwOGVlYTMtYWM2Mi00MWQzLWFmODgtZTU1ZGY4MzRjYjFjIl0sImp0aSI6IjlkZjRmNjY2LTAwMjUtNGU0ZC1hMmE5LWU3NTJmZDQwMTI4OCJ9.Fmp0PsBsS4UzUb6EBOAoiYWz_QCV-BW0vg8TWW0RvDo",
+              name: key,
+              value: accountInfo.value[key].content,
+            }),
+          }
+        ).then((res) => {
           if (res.status === 200) {
             getAccountInfo[key] = accountInfo.value[key].content;
             isActive.value = false;

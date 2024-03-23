@@ -83,14 +83,14 @@ const rulesForPwd = ref([
   }, "Pwd"),
 ]);
 function signupSubmit() {
-  const url = "http://127.0.0.1:4523/m1/4078973-0-default/api/v1/register";
+  const url = "http://10.20.235.113:8080/api/v1/user/sign_up";
   if (!Object.values(formIsChecked.value).every((value) => value === true)) {
     return false;
   }
   const fetchPromis = fetch(url, {
     method: "POST",
     body: JSON.stringify({
-      username: ID.value,
+      email: Email.value,
       password: pwd.value,
     }),
   });
