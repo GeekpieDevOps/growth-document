@@ -1,0 +1,17 @@
+{
+    "name": "Backend Dev Container",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "devcontainer",
+    "onCreateCommand": "useradd $USERNAME && mkdir -p /etc/sudoers.d/ && echo \"$USERNAME ALL=(ALL:ALL) ALL\" | tee /etc/sudoers.d/$USERNAME ",
+    "postCreateCommand": "useradd $USERNAME && mkdir -p /etc/sudoers.d/ && echo \"$USERNAME ALL=(ALL:ALL) ALL\" | tee /etc/sudoers.d/$USERNAME ",
+    "containerEnv": {
+        "USERNAME": "${localEnv:USER}"
+    },
+    "remoteEnv": {
+        "USERNAME": "${localEnv:USER}"
+    },
+    "workspaceFolder": "/growth-document",
+    "forwardPorts": [8080],
+    "updateRemoteUserUID": true,
+    "remoteUser": "${localEnv:USERNAME}",
+}

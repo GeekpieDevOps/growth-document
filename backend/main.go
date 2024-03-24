@@ -12,6 +12,7 @@ import (
 	"errors"
 	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/GeekpieDevOps/growth-document/backend/api"
 	"github.com/GeekpieDevOps/growth-document/backend/models"
@@ -42,24 +43,30 @@ func main() {
 }
 
 func openDatabase() (db *gorm.DB, err error) {
+	databaseUrl := os.Getenv("DATABASE_URL")
 	dsn := os.Getenv("GD_DSN")
+	drv := os.Getenv("GD_DRV")
+	if databaseUrl != "" {
+		dsn = databaseUrl
+		drv = dsn[:strings.Index(dsn, ":")]
+	}
 	if dsn == "" {
-		err = errors.New("environment variable GD_DSN is empty or not set")
+		err = errors.New("environment variable GD_DSN is empty or not set. Or DATABASE_URL is not properly set")
 		slog.Error(err.Error())
 		return
 	}
 
 	var dialector gorm.Dialector
-	switch os.Getenv("GD_DRV") {
+	switch drv {
 	case "":
-		slog.Warn("environment variable GD_DRV is empty or not set, defaulting to SQLite")
+		slog.Warn("environment variable GD_DRV is empty or not set, defaulting to SQLite. Or DATABASE_URL is not properly set")
 		fallthrough
 	case "sqlite":
 		dialector = sqlite.Open(dsn)
 	case "postgres":
 		dialector = postgres.Open(dsn)
 	default:
-		err = errors.New("environment variable GD_DRV has invalid value, should be one of `sqlite' or `postgres'")
+		err = errors.New("environment variable GD_DRV has invalid value, should be one of `sqlite' or `postgres'. Or DATABASE_URL is not properly set")
 		slog.Error(err.Error())
 		return
 	}

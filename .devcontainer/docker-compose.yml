@@ -1,0 +1,25 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - ../backend/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: Passw0rdForTest1ngEnvironment
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+
+  devcontainer:
+    image: golang@sha256:46a86b411554728154e56f9719426a47e5ded3cab7adb1ecb22a988f486e99ae
+    # image : golang:1.22.1, from debian:12
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres:Passw0rdForTest1ngEnvironment@db:5432/postgres
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../:/growth-document
+    working_dir: /growth-document
+    # force it to hang
+    command: tail -f /dev/null
