@@ -64,7 +64,7 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 		}
 		c.JSON(http.StatusOK,gin.H{
 			//返回登出成功
-			"message":"Sign out succesfully!"
+			"message":"Sign out succesfully!",
 		})
 	}
 }
