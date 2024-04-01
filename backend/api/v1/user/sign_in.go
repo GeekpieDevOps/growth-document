@@ -85,7 +85,7 @@ func SignIn(db *gorm.DB) func(c *gin.Context) {
 			ID:    id,
 			UUID:  user.UUID,
 			Nonce: user.Nonce,
-			Token: signedToken,
+			Token: signedToken,//由密钥生成的签名
 		})
 		if result.Error != nil {
 			// Can't handle this, so abort
