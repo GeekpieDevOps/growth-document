@@ -11,15 +11,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type SignOutRequest struct{
+type LogOffRequest struct{
 	Token string `json:"token" binding:"required,jwt"`
 	UUID string `json:"uuid" binding "required,uuid"`
 }
-func SignOut(db *gorm.DB) func(c *gin.Context){
+func LogOff(db *gorm.DB) func(c *gin.Context){
 	return func(c *gin.Context){
 
 		//解析，并检查字段是否合法。此处操作同sign_in sign_up
-		var req SignOutRequest
+		var req LogOffRequest
 		if err:=c.ShouldBindJSON(&req);err!=nil{
 			if v,ok:=err.(validator.ValidationErrors);ok{
 				c.AbortWithStatusJSON(http.StatusBadRequest,gin.H{
