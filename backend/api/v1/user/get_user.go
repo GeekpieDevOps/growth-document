@@ -12,7 +12,7 @@ import (
 )
 
 type GetRequest struct{
-	UUID uuid.UUID `json:"uuid" binding:"required,uuid"`
+	UUID string `json:"uuid" binding:"required,uuid"`
 	ID string `json:"id" `
 	Password string `json "password`
 }
@@ -59,7 +59,7 @@ func GetUser(db *gorm.DB)func(c *gin.Context){
 				c.AbortWithStatus(http.StatusUnauthorized)
 				return
 			}else{
-				c.AbortWithError(http.StatusInternalServerError)
+				c.AbortWithError(http.StatusInternalServerError,result.Error)
 				return
 			}
 		}
