@@ -25,7 +25,7 @@ func GetUser(db *gorm.DB)func(c *gin.Context){
 		if err:=c.ShouldBindJSON(&req);err!=nil{
 			if v,ok:=err.(validator.ValidationErrors);ok{
 				c.AbortWithStatusJSON(http.StatusBadRequest,gin.H{
-					"fields":lo.Map(v,func(f validator.FieldError,_int)string{
+					"fields":lo.Map(v,func(f validator.FieldError,_ int)string{
 						return f.Field()
 					}),
 				})
@@ -48,8 +48,8 @@ func GetUser(db *gorm.DB)func(c *gin.Context){
 				c.AbortWithError(http.StatusInternalServerError,resultToken.Error)
 				return
 			}
-		}*/
-
+		}
+*/
 		//检查是否找到了用户
 		var user models.User
 		result:=db.Where("uuid = ? AND id = ? AND password = ",req.UUID,req.ID,req.Password).First(&user)
@@ -70,7 +70,7 @@ func GetUser(db *gorm.DB)func(c *gin.Context){
 			"message":"Sccessfully found",
 			"data":gin.H{
 				"邮箱":user.Email,
-			}
+			},
 		})
 	}
 }
