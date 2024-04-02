@@ -75,7 +75,7 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 			return
 		}
 
-		//删除相应的令牌，实现登出操作
+		//删除相应的令牌
 		resultDelete:=db.Where("token = ? AND uuid = ?",req.Token,req.UUID).Delete(&token)
 		if resultDelete.Error!=nil{
 			//删除操作出错
