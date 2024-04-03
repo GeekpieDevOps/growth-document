@@ -35,7 +35,15 @@ func GetUser(db *gorm.DB)func(c *gin.Context){
 			return
 		}
 
-/*		//检查是否找到了用户的登录令牌
+		//对用户的令牌进行解析
+		parseToken,err:=jwt.ParseWithClaims(req.Token,&CustomClaims{},func(parseToken *jwt.Token)(i interface{},err error){
+			return Nonce,nil
+		})
+		if err!=nil{
+			return 
+		}
+
+		//检查是否找到了用户的登录令牌
 		var token models.Token
 		resultToken:=db.Where("uuid = ?",req.UUID).First(&token)
 		if resultToken.Error!=nil{
@@ -49,7 +57,7 @@ func GetUser(db *gorm.DB)func(c *gin.Context){
 				return
 			}
 		}
-*/
+/**/
 		//检查是否找到了用户
 		var user models.User
 		result:=db.Where("uuid = ? AND id = ? AND password = ",req.UUID,req.ID,req.Password).First(&user)

@@ -31,6 +31,14 @@ func LogOff(db *gorm.DB) func(c *gin.Context){
 			}
 			c.AbortWithStatus(http.StatusBadRequest)
 		}
+    
+		//对用户的令牌进行解析
+		parseToken,err:=jwt.ParseWithClaims(req.Token,&CustomClaims{},func(parseToken *jwt.Token)(i interface{},err error){
+			return Nonce,nil
+		})
+		if err!=nil{
+			return 
+		}
 
 		//检查是否找到了用户的登录令牌
 		var token models.Token
