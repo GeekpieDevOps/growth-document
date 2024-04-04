@@ -9,6 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
+	"github.com/dgrijalva/jwt-go"
 )
 
 type LogOffRequest struct{
