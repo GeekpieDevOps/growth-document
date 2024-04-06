@@ -13,7 +13,7 @@ import (
 )
 
 type UpdateRequest struct{
-	Token string `json:"token" binding:"required,jwt"`
+	//Token string `json:"token" binding:"required,jwt"`
 	Name string `json:"name" binding:"required"`
 	Value string `json:"value" binding:"required"`
 }
@@ -35,6 +35,13 @@ func Update(db *gorm.DB) func(c *gin.Context){
 			return
 		}
 
+		//从cookie中获取用户的令牌
+		tokenstring, err := c.Cookie("token")
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token not found"})
+			return
+		}
+		
 		//对用户的令牌进行解析
 		type RegisteredClaims struct{
 			Subject: string
@@ -42,7 +49,7 @@ func Update(db *gorm.DB) func(c *gin.Context){
 			ID:string
 		}
 
-		parseToken,err:=jwt.ParseWithClaims(req.Token, &RegisteredClaims{}, func(token *jwt.Token)(i interface{},err error){
+		parseToken,err:=jwt.ParseWithClaims(tokenstring, &RegisteredClaims{}, func(token *jwt.Token)(i interface{},err error){
 			return _,nil
 		})
 		if err!=nil{
@@ -58,7 +65,7 @@ func Update(db *gorm.DB) func(c *gin.Context){
 		var token models.Token
 		uuid:=c.Param("uuid")
 
-		result:=db.Where("Token = ? AND UUID = ?",req.Token,uuid).First(&token)
+		result:=db.Where("Token = ? AND UUID = ?",tokenstring,uuid).First(&token)
 		if result.Error!=nil{
 			if errors.Is(result.Error,gorm.ErrRecordNotFound){
 				//未找到用户的登录令牌

@@ -81,6 +81,8 @@ func SignIn(db *gorm.DB) func(c *gin.Context) {
 			return
 		}
 
+		c.SetCookie("token", signedToken, 3600, "/", "", false, true)
+
 		result = db.Create(&models.Token{
 			ID:    id,
 			UUID:  user.UUID,

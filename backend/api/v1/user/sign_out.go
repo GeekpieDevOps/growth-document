@@ -12,14 +12,14 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-type SignOutRequest struct{
-	Token string `json:"token" binding:"required,jwt"`
+//type SignOutRequest struct{
+	//Token string `json:"token" binding:"required,jwt"`
 	//UUID string `json:"uuid" binding "required,uuid"`
-}
+//}
 func SignOut(db *gorm.DB) func(c *gin.Context){
 	return func(c *gin.Context){
 
-		//解析，并检查字段是否合法。此处操作同sign_in sign_up
+/*		//解析，并检查字段是否合法。此处操作同sign_in sign_up
 		var req SignOutRequest
 		if err:=c.ShouldBindJSON(&req);err!=nil{
 			if v,ok:=err.(validator.ValidationErrors);ok{
@@ -31,6 +31,13 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 				return
 			}
 			c.AbortWithStatus(http.StatusBadRequest)
+		}*/
+
+		//从cookie中获取用户的令牌
+		tokenstring, err := c.Cookie("token")
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token not found"})
+			return
 		}
 
 		//对用户的令牌进行解析
@@ -40,7 +47,7 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 			ID:string
 		}
 
-		parseToken,err:=jwt.ParseWithClaims(req.Token, &RegisteredClaims{}, func(token *jwt.Token)(i interface{},err error){
+		parseToken,err:=jwt.ParseWithClaims(tokenstring, &RegisteredClaims{}, func(token *jwt.Token)(i interface{},err error){
 			return _,nil
 		})
 		if err!=nil{
@@ -56,7 +63,7 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 		var token models.Token
 		uuid:=c.Param("uuid")
 
-		result:=db.Where("Token = ? AND UUID = ?",req.Token,uuid).First(&token)
+		result:=db.Where("Token = ? AND UUID = ?",tokenstring,uuid).First(&token)
 		if result.Error!=nil{
 			if errors.Is(result.Error,gorm.ErrRecordNotFound){
 				//未找到用户的登录令牌
@@ -70,7 +77,7 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 		}
 
 		//删除相应的令牌，实现登出操作
-		resultDelete:=db.Where("Token = ?",req.Token).Delete(&token)
+		resultDelete:=db.Where("Token = ?",tokenstring).Delete(&token)
 		if resultDelete.Error!=nil{
 			//删除操作出错
 			c.AbortWithError(http.StatusInternalServerError,resultDelete.Error)
