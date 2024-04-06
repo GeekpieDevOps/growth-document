@@ -9,7 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
-	"github.com/dgrijalva/jwt-go"
+	//"github.com/dgrijalva/jwt-go"
 )
 
 type UpdateRequest struct{
@@ -20,7 +20,7 @@ type UpdateRequest struct{
 
 func Update(db *gorm.DB) func(c *gin.Context){
 	return func(c *gin.Context){
-		var req GetRequest
+		var req UpdateRequest
 		//判断请求字段的合法性
 		if err:=c.ShouldBindJSON(&req);err!=nil{
 			if v,ok:=err.(validator.ValidationErrors);ok{
@@ -42,11 +42,11 @@ func Update(db *gorm.DB) func(c *gin.Context){
 			return
 		}
 		
-		//对用户的令牌进行解析
+/*		//对用户的令牌进行解析
 		type RegisteredClaims struct{
-			Subject: string
-			Audience :string
-			ID:string
+			Subject string
+			Audience string
+			ID string
 		}
 
 		parseToken,err:=jwt.ParseWithClaims(tokenstring, &RegisteredClaims{}, func(token *jwt.Token)(i interface{},err error){
@@ -59,7 +59,7 @@ func Update(db *gorm.DB) func(c *gin.Context){
 		if !parseToken.Valid{
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
-		}
+		}*/
 		
 		//检查是否找到了用户的登录令牌
 		var token models.Token
@@ -80,36 +80,32 @@ func Update(db *gorm.DB) func(c *gin.Context){
 
 		//检查是否找到了用户
 		var user models.User
-		result:=db.Where("UUID = ?",uuid).First(&user)
-		if result.Error!=nil{
+		userResult:=db.Where("UUID = ?",uuid).First(&user)
+		if userResult.Error!=nil{
 			//用户不存在
-			if errors.Is(result.Error,gorm.ErrRecordNotFound){
+			if errors.Is(userResult.Error,gorm.ErrRecordNotFound){
 				c.AbortWithStatus(http.StatusUnauthorized)
 				return
 			}else{
-				c.AbortWithError(http.StatusInternalServerError,result.Error)
+				c.AbortWithError(http.StatusInternalServerError,userResult.Error)
 				return
 			}
 		}
 
 		switch req.Name{
-			case "ID"{
-				user.ID=req.Value
-			}
-			case "Email"{
-				user.Email=req.Value
-			}
-			case "Password"{
-				user.Password=req.Value
-			}
-			case "Nickname"{
-				user.Nickname=req.Value
-			}
-			default:
-				c.AbortWithStatus(http.StatusBadRequest)
+		case "ID":
+			user.ID=req.Value
+		case "Email":
+			user.Email=req.Value
+		case "Password":
+			user.Password=req.Value
+		case "Nickname":
+			user.Nickname=req.Value
+		default:
+			c.AbortWithStatus(http.StatusBadRequest)
 		}
 
-		c.JSON(http.StatusOK, UpdateResponse{
+		c.JSON(http.StatusOK, gin.H{
 			"message":"修改成功",
 		})
 

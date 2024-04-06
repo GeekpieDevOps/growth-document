@@ -6,32 +6,16 @@ import (
 
 	"github.com/GeekpieDevOps/growth-document/backend/models"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
-	"github.com/samber/lo"
+//	"github.com/go-playground/validator/v10"
+//	"github.com/samber/lo"
 	"gorm.io/gorm"
-	"github.com/dgrijalva/jwt-go"
+//	"github.com/dgrijalva/jwt-go"
 )
 
-//type SignOutRequest struct{
-	//Token string `json:"token" binding:"required,jwt"`
-	//UUID string `json:"uuid" binding "required,uuid"`
-//}
+
+
 func SignOut(db *gorm.DB) func(c *gin.Context){
 	return func(c *gin.Context){
-
-/*		//解析，并检查字段是否合法。此处操作同sign_in sign_up
-		var req SignOutRequest
-		if err:=c.ShouldBindJSON(&req);err!=nil{
-			if v,ok:=err.(validator.ValidationErrors);ok{
-				c.AbortWithStatusJSON(http.StatusBadRequest,gin.H{
-					"fields":lo.Map(v,func(f validator.FieldError,_ int)string{
-						return f.Field()
-					}),
-				})
-				return
-			}
-			c.AbortWithStatus(http.StatusBadRequest)
-		}*/
 
 		//从cookie中获取用户的令牌
 		tokenstring, err := c.Cookie("token")
@@ -40,11 +24,11 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 			return
 		}
 
-		//对用户的令牌进行解析
+/*		//对用户的令牌进行解析
 		type RegisteredClaims struct{
-			Subject: string
-			Audience :string
-			ID:string
+			Subject string
+			Audience string
+			ID string
 		}
 
 		parseToken,err:=jwt.ParseWithClaims(tokenstring, &RegisteredClaims{}, func(token *jwt.Token)(i interface{},err error){
@@ -57,7 +41,7 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 		if !parseToken.Valid{
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
-		}
+		}*/
 
 		//检查是否找到了用户的登录令牌
 		var token models.Token
@@ -91,14 +75,14 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 
 		//检查是否找到了用户
 		var user models.User
-		result:=db.Where("UUID = ?",uuid).First(&user)
-		if result.Error!=nil{
+		tokenResult:=db.Where("UUID = ?",uuid).First(&user)
+		if tokenResult.Error!=nil{
 			//用户不存在
-			if errors.Is(result.Error,gorm.ErrRecordNotFound){
+			if errors.Is(tokenResult.Error,gorm.ErrRecordNotFound){
 				c.AbortWithStatus(http.StatusUnauthorized)
 				return
 			}else{
-				c.AbortWithError(http.StatusInternalServerError,result.Error)
+				c.AbortWithError(http.StatusInternalServerError,tokenResult.Error)
 				return
 			}
 		}

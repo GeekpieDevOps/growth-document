@@ -6,32 +6,14 @@ import (
 
 	"github.com/GeekpieDevOps/growth-document/backend/models"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
-	"github.com/samber/lo"
+//	"github.com/go-playground/validator/v10"
+//	"github.com/samber/lo"
 	"gorm.io/gorm"
-	"github.com/dgrijalva/jwt-go"
+//	"github.com/dgrijalva/jwt-go"
 )
 
-//type LogOffRequest struct{
-	//Token string `json:"token" binding:"required,jwt"`
-	//UUID string `json:"uuid" binding "required,uuid"`
-//}
 func LogOff(db *gorm.DB) func(c *gin.Context){
 	return func(c *gin.Context){
-
-		//解析，并检查字段是否合法。此处操作同sign_in sign_up
-/*		var req LogOffRequest
-		if err:=c.ShouldBindJSON(&req);err!=nil{
-			if v,ok:=err.(validator.ValidationErrors);ok{
-				c.AbortWithStatusJSON(http.StatusBadRequest,gin.H{
-					"fields":lo.Map(v,func(f validator.FieldError,_ int)string{
-						return f.Field()
-					}),
-				})
-				return
-			}
-			c.AbortWithStatus(http.StatusBadRequest)
-		}*/
 
 		//从cookie中获取用户的令牌
 		tokenstring, err := c.Cookie("token")
@@ -40,11 +22,11 @@ func LogOff(db *gorm.DB) func(c *gin.Context){
 			return
 		}
     
-		//对用户的令牌进行解析
+/*		//对用户的令牌进行解析
 		type RegisteredClaims struct{
-			Subject: string
-			Audience :string
-			ID:string
+			Subject string
+			Audience string
+			ID string
 		}
 
 		parseToken,err:=jwt.ParseWithClaims(tokenstring, &RegisteredClaims{}, func(token *jwt.Token)(i interface{},err error){
@@ -57,7 +39,7 @@ func LogOff(db *gorm.DB) func(c *gin.Context){
 		if !parseToken.Valid{
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
-		}
+		}*/
 
 		//检查是否找到了用户的登录令牌
 		var token models.Token
@@ -106,7 +88,7 @@ func LogOff(db *gorm.DB) func(c *gin.Context){
 		}
 
 		//删除相应的令牌
-		resultDelete:=db.Where("token = ? AND uuid = ?",req.Token,uuid).Delete(&token)
+		resultDelete:=db.Where("token = ? AND uuid = ?",tokenstring,uuid).Delete(&token)
 		if resultDelete.Error!=nil{
 			//删除操作出错
 			c.AbortWithError(http.StatusInternalServerError,resultDelete.Error)
