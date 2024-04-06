@@ -14,7 +14,7 @@ import (
 
 type LogOffRequest struct{
 	Token string `json:"token" binding:"required,jwt"`
-	UUID string `json:"uuid" binding "required,uuid"`
+	//UUID string `json:"uuid" binding "required,uuid"`
 }
 func LogOff(db *gorm.DB) func(c *gin.Context){
 	return func(c *gin.Context){
@@ -34,16 +34,30 @@ func LogOff(db *gorm.DB) func(c *gin.Context){
 		}
     
 		//对用户的令牌进行解析
-		parseToken,err:=jwt.ParseWithClaims(req.Token,&CustomClaims{},func(parseToken *jwt.Token)(i interface{},err error){
-			return Nonce,nil
+		type RegisteredClaims struct{
+			Subject: string
+			Audience :string
+			ID:string
+		}
+
+		parseToken,err:=jwt.ParseWithClaims(req.Token, &RegisteredClaims{}, func(token *jwt.Token)(i interface{},err error){
+			return _,nil
 		})
 		if err!=nil{
-			return 
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+		if !parseToken.Valid{
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
 		}
 
 		//检查是否找到了用户的登录令牌
 		var token models.Token
-		resultToken:=db.Where("token = ? AND uuid = ?",req.Token,req.UUID).First(&token)
+		uuid:=c.Param("uuid")
+
+		//查找token
+		resultToken:=db.Where("token = ?",req.Token).First(&token)
 		if resultToken.Error!=nil{
 			if errors.Is(resultToken.Error,gorm.ErrRecordNotFound){
 				//未找到用户的登录令牌
@@ -58,7 +72,7 @@ func LogOff(db *gorm.DB) func(c *gin.Context){
 
 		//根据提供的uuid查找用户
 		var user models.User
-		resultUser:=db.Where("uuid = ?",req.UUID).First(&user)
+		resultUser:=db.Where("uuid = ?",uuid).First(&user)
 		if resultUser.Error!=nil{
 			if errors.Is(resultUser.Error,gorm.ErrRecordNotFound){
 				//未找到用户
@@ -72,7 +86,7 @@ func LogOff(db *gorm.DB) func(c *gin.Context){
 		}
 
 		//删除用户
-		resultDeleteUser:=db.Where("uuid = ?",req.UUID).Delete(&user)
+		resultDeleteUser:=db.Where("uuid = ?",uuid).Delete(&user)
 		if resultDeleteUser.Error!=nil{
 			//删除操作出错
 			c.AbortWithError(http.StatusInternalServerError,resultDeleteUser.Error)
@@ -85,7 +99,7 @@ func LogOff(db *gorm.DB) func(c *gin.Context){
 		}
 
 		//删除相应的令牌
-		resultDelete:=db.Where("token = ? AND uuid = ?",req.Token,req.UUID).Delete(&token)
+		resultDelete:=db.Where("token = ? AND uuid = ?",req.Token,uuid).Delete(&token)
 		if resultDelete.Error!=nil{
 			//删除操作出错
 			c.AbortWithError(http.StatusInternalServerError,resultDelete.Error)

@@ -9,11 +9,9 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
-	"github.com/dgrijalva/jwt-go"
 )
 
 type GetRequest struct{
-	UUID string `json:"uuid" binding:"required,uuid"`
 	ID string `json:"id" `
 	Password string `json "password`
 }
@@ -36,17 +34,25 @@ func GetUser(db *gorm.DB)func(c *gin.Context){
 			return
 		}
 
-		//对用户的令牌进行解析
-		parseToken,err:=jwt.ParseWithClaims(req.Token,&CustomClaims{},func(parseToken *jwt.Token)(i interface{},err error){
-			return Nonce,nil
-		})
-		if err!=nil{
-			return 
+		//检查是否找到了用户
+		var user models.User
+		result:=db.Where("ID = ? AND Password = ",req.ID,req.Password).First(&user)
+		if result.Error!=nil{
+			//用户不存在
+			if errors.Is(result.Error,gorm.ErrRecordNotFound){
+				c.AbortWithStatus(http.StatusUnauthorized)
+				return
+			}else{
+				c.AbortWithError(http.StatusInternalServerError,result.Error)
+				return
+			}
 		}
 
 		//检查是否找到了用户的登录令牌
 		var token models.Token
-		resultToken:=db.Where("uuid = ?",req.UUID).First(&token)
+		uuid:=c.Param("uuid")
+
+		resultToken:=db.Where("UUID = ?",uuid).First(&token)
 		if resultToken.Error!=nil{
 			if errors.Is(resultToken.Error,gorm.ErrRecordNotFound){
 				//未找到用户的登录令牌
@@ -55,20 +61,6 @@ func GetUser(db *gorm.DB)func(c *gin.Context){
 			}else{
 				//其他的未知错误
 				c.AbortWithError(http.StatusInternalServerError,resultToken.Error)
-				return
-			}
-		}
-/**/
-		//检查是否找到了用户
-		var user models.User
-		result:=db.Where("uuid = ? AND id = ? AND password = ",req.UUID,req.ID,req.Password).First(&user)
-		if result.Error!=nil{
-			//用户不存在
-			if errors.Is(result.Error,gorm.ErrRecordNotFound){
-				c.AbortWithStatus(http.StatusUnauthorized)
-				return
-			}else{
-				c.AbortWithError(http.StatusInternalServerError,result.Error)
 				return
 			}
 		}

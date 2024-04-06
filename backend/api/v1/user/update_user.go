@@ -12,15 +12,16 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-type SignOutRequest struct{
+type UpdateRequest struct{
 	Token string `json:"token" binding:"required,jwt"`
-	//UUID string `json:"uuid" binding "required,uuid"`
+	Name string `json:"name" binding:"required"`
+	Value string `json:"value" binding:"required"`
 }
-func SignOut(db *gorm.DB) func(c *gin.Context){
-	return func(c *gin.Context){
 
-		//解析，并检查字段是否合法。此处操作同sign_in sign_up
-		var req SignOutRequest
+func Update(db *gorm.DB) func(c *gin.Context){
+	return func(c *gin.Context){
+		var req GetRequest
+		//判断请求字段的合法性
 		if err:=c.ShouldBindJSON(&req);err!=nil{
 			if v,ok:=err.(validator.ValidationErrors);ok{
 				c.AbortWithStatusJSON(http.StatusBadRequest,gin.H{
@@ -31,6 +32,7 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 				return
 			}
 			c.AbortWithStatus(http.StatusBadRequest)
+			return
 		}
 
 		//对用户的令牌进行解析
@@ -51,7 +53,7 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
-
+		
 		//检查是否找到了用户的登录令牌
 		var token models.Token
 		uuid:=c.Param("uuid")
@@ -69,19 +71,6 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 			}
 		}
 
-		//删除相应的令牌，实现登出操作
-		resultDelete:=db.Where("Token = ?",req.Token).Delete(&token)
-		if resultDelete.Error!=nil{
-			//删除操作出错
-			c.AbortWithError(http.StatusInternalServerError,resultDelete.Error)
-			return
-		}
-		if resultDelete.RowsAffected==0{
-			//操作后数据库行数未收到影响，即未找到匹配的记录
-			c.AbortWithStatus(http.StatusNotFound)
-			return
-		}
-
 		//检查是否找到了用户
 		var user models.User
 		result:=db.Where("UUID = ?",uuid).First(&user)
@@ -96,9 +85,26 @@ func SignOut(db *gorm.DB) func(c *gin.Context){
 			}
 		}
 
-		c.JSON(http.StatusOK,gin.H{
-			//返回登出成功
-			"message":"Sign out succesfully!",
+		switch req.Name{
+			case "ID"{
+				user.ID=req.Value
+			}
+			case "Email"{
+				user.Email=req.Value
+			}
+			case "Password"{
+				user.Password=req.Value
+			}
+			case "Nickname"{
+				user.Nickname=req.Value
+			}
+			default:
+				c.AbortWithStatus(http.StatusBadRequest)
+		}
+
+		c.JSON(http.StatusOK, UpdateResponse{
+			"message":"修改成功",
 		})
+
 	}
 }
