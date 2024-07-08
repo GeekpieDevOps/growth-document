@@ -1,27 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login</title>
-    <link rel="stylesheet" href="login.css">
-    <link rel="icon" href="./assets/logo_temp.jpg">
-</head>
-<body>
-    <div class="login">
-        <h1>Login</h1>
-        <!-- <form action="http://127.0.0.1:4523/m1/4078973-0-default/api/v1/login" method="post" class="form"> -->
-        <div class = 'input-box'>
-            <input type="text" name="username" placeholder="用户名" required="required" id="username"/>
-            <input type="password" name="password" placeholder="密码" required="required" id="password"/>
-            <button type="submit" class="btn" onclick="login()">登录</button>
-        </div>
-        
-        <!-- </form> -->
-    </div>
+<html lang="en" style="overflow-y: auto">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Vuetify 3</title>
+  </head>
 
-        <img src="./assets/456.jpg"  class="pic1"/>
-
-    <script src="login.js"></script>
-</body>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/pages/login/main.js"></script>
+  </body>
 </html>
