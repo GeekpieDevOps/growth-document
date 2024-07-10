@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import LoginNav from "@/components/LoginNav.vue";
+import LoginNav from "@/components/login/LoginNav.vue";
 
 //
 </script>

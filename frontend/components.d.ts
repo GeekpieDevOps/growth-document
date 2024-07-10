@@ -7,13 +7,13 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    AccountWindow: typeof import('./src/components/AccountWindow.vue')['default']
+    AccountWindow: typeof import('./src/components/account/AccountWindow.vue')['default']
     Alert: typeof import('./src/components/Alert.vue')['default']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    HelloWorld: typeof import("./src/components/HelloWorld.vue")["default"]
     IndexNav: typeof import('./src/components/IndexNav.vue')['default']
-    LoginCard: typeof import('./src/components/LoginCard.vue')['default']
-    LoginNav: typeof import('./src/components/LoginNav.vue')['default']
-    LogoShow: typeof import('./src/components/LogoShow.vue')['default']
+    LoginCard: typeof import('./src/components/login/LoginCard.vue')['default']
+    LoginNav: typeof import('./src/components/login/LoginNav.vue')['default']
+    LogoShow: typeof import('./src/components/login/LogoShow.vue')['default']
     MemberCard: typeof import('./src/components/MemberCard.vue')['default']
     MemberFram: typeof import('./src/components/MemberFram.vue')['default']
     MemberTitle: typeof import('./src/components/MemberTitle.vue')['default']
@@ -21,7 +21,7 @@ declare module 'vue' {
     MemberWindowbak: typeof import('./src/components/MemberWindowbak.vue')['default']
     PictureCard: typeof import('./src/components/PictureCard.vue')['default']
     PictureRoll: typeof import('./src/components/PictureRoll.vue')['default']
-    SignupCard: typeof import('./src/components/SignupCard.vue')['default']
+    SignupCard: typeof import('./src/components/signup/SignupCard.vue')['default']
     Sylogo: typeof import('./src/components/sylogo.vue')['default']
   }
 }

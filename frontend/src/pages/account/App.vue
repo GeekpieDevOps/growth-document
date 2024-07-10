@@ -14,3 +14,17 @@
     </v-main>
   </v-app>
 </template>
+
+<script>
+import MemberFram from "@/components/MemberFram.vue";
+import MemberTitle from "@/components/MemberTitle.vue";
+import AccountWindow from "@/components/account/AccountWindow.vue";
+
+export default {
+  components: {
+    MemberFram,
+    MemberTitle,
+    AccountWindow,
+  },
+};
+</script>

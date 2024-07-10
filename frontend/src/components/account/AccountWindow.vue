@@ -218,97 +218,105 @@
   >
 </template>
 <script>
-import { ref } from "vue";
+import { api } from "@/data.js";
+
 export default {
   name: "AccountWindow",
-
-  setup() {
-    const tab = ref(1);
-    const passwordModify = ref("");
-    const passwordConfirm = ref("");
-    const getAccountInfo = {
-      姓名: "John Doe",
-      Email: "1234.shanghai.edu.cn",
-      书院: "上道书院",
-      学院: "信息学院",
+  data() {
+    return {
+      tab: 1,
+      passwordModify: "",
+      passwordConfirm: "",
+      getAccountInfo: {
+        姓名: "John Doe",
+        邮箱: "1234.shanghai.edu.cn",
+        书院: "上道书院",
+        学院: "信息学院",
+      },
+      accountInfo: {
+        姓名: { content: "", disabled: false },
+        邮箱: { content: "", disabled: true },
+        书院: {
+          content: "",
+          disabled: true,
+          options: ["上道书院", "科道书院", "大道书院"],
+        },
+        学院: {
+          content: "",
+          disabled: true,
+          options: ["信息学院", "数学所", "物质学院"],
+        },
+      },
+      userInfoChangeState: "",
     };
-    const accountInfo = ref({
-      姓名: { content: "", disabled: false },
-      Email: { content: "", disabled: true },
-      书院: {
-        content: "",
-        disabled: true,
-        options: ["上道书院", "科道书院", "大道书院"],
-      },
-      学院: {
-        content: "",
-        disabled: true,
-        options: ["信息学院", "数学所", "物质学院"],
-      },
-    });
-    const userInfoChangeState = ref("");
-    userInfoFormRest();
-
-    function resetImg() {
+  },
+  methods: {
+    getCookie() {
+      // let cookies = document.cookie.split("; ");
+      // for (let i = 0; i < cookies.length; i++) {
+      //   let [cookieName, cookieVal] = cookies[i].split("=");
+      //   if (cookieName === name) {
+      //     return cookieVal;
+      //   }
+      // }
+      // return null;
+      return {
+        uuid: "1234",
+      };
+    },
+    resetImg() {
       // fetch
-    }
-    function changePWD() {
+    },
+    changePWD() {
       // fetch
-    }
-    function checkUserInfoChange() {
+    },
+    checkUserInfoChange() {
       let changeKeys = [];
-      for (let key in accountInfo.value) {
-        if (accountInfo.value[key].content !== getAccountInfo[key]) {
+      for (let key in this.accountInfo) {
+        if (this.accountInfo[key].content !== this.getAccountInfo[key]) {
           changeKeys.push(key);
         }
       }
       return changeKeys;
-    }
-
-    function userInfoFormSubmit(isActive) {
-      let changeKeys = checkUserInfoChange();
+    },
+    userInfoFormSubmit(isActive) {
+      let changeKeys = this.checkUserInfoChange();
       if (changeKeys.length === 0) {
-        isActive.value = false;
+        isActive = false;
         return;
       }
       for (let key of changeKeys) {
-        fetch(
-          "http://10.20.235.113:8080/api/v1/user/6608eea3-ac62-41d3-af88-e55df834cb1c",
-          {
-            method: "PUT",
-            body: JSON.stringify({
-              token:
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjM2FjMTBkNy02NTI2LTQ2ODQtODZhOC03MDc0YTNlMGJkMzgiLCJhdWQiOlsiNjYwOGVlYTMtYWM2Mi00MWQzLWFmODgtZTU1ZGY4MzRjYjFjIl0sImp0aSI6IjlkZjRmNjY2LTAwMjUtNGU0ZC1hMmE5LWU3NTJmZDQwMTI4OCJ9.Fmp0PsBsS4UzUb6EBOAoiYWz_QCV-BW0vg8TWW0RvDo",
-              name: key,
-              value: accountInfo.value[key].content,
-            }),
-          }
-        ).then((res) => {
+        fetch(api.account(this.getCookie().uuid), {
+          method: "PUT",
+        }).then((res) => {
           if (res.status === 200) {
-            getAccountInfo[key] = accountInfo.value[key].content;
-            isActive.value = false;
+            this.getAccountInfo[key] = this.accountInfo[key].content;
+            isActive = false;
           }
         });
       }
-    }
-
-    function userInfoFormRest() {
-      for (let key in accountInfo.value) {
-        accountInfo.value[key].content = getAccountInfo[key];
+    },
+    userInfoFormRest() {
+      for (let key in this.accountInfo) {
+        this.accountInfo[key].content = this.getAccountInfo[key];
       }
-    }
-    return {
-      tab,
-      passwordConfirm,
-      passwordModify,
-      accountInfo,
-      userInfoChangeState,
-      checkUserInfoChange,
-      userInfoFormRest,
-      userInfoFormSubmit,
-      resetImg,
-      changePWD,
-    };
+    },
+  },
+  created() {
+    fetch(api.account(this.getCookie().uuid), {
+      method: "GET",
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        this.getAccountInfo = data.data;
+        this.$nextTick(() => {
+          this.userInfoFormRest();
+        }, 0);
+      });
   },
 };
 </script>
