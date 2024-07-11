@@ -16,6 +16,7 @@
     "@mdi/font": "^7.4.47",
     "@mdi/js": "^7.4.47",
     "@vitejs/plugin-vue": "^4.5.0",
+    "@vitejs/plugin-vue-jsx": "^4.0.0",
     "sass": "^1.69.0",
     "unplugin-fonts": "^1.1.0",
     "unplugin-vue-components": "^0.26.0",

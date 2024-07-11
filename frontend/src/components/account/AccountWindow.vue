@@ -74,27 +74,14 @@
                               ></v-btn
                             ></v-row> </v-form></v-card-action></v-card></template
                   ></v-dialog>
-                  <v-dialog max-width="350" persistent
-                    ><template v-slot:activator="{ props: activatorProps }"
-                      ><v-btn
-                        class="mx-3"
-                        color="rgb(250, 137, 107)"
-                        variant="outlined"
-                        width="80"
-                        v-bind="activatorProps"
-                        >重置</v-btn
-                      ></template
-                    >
-                    <template v-slot:default="{ isActive }">
-                      <Alert
-                        title="确认重置"
-                        text="重置后将无法撤回！"
-                        activeText="重置"
-                        :isActive="isActive"
-                        :active="resetImg"
-                      />
-                    </template>
-                  </v-dialog>
+                  <v-btn
+                    class="mx-3"
+                    color="rgb(250, 137, 107)"
+                    variant="outlined"
+                    width="80"
+                    @click="submitAlert"
+                    >重置</v-btn
+                  >
                 </v-row>
                 <v-row class="my-10 px-8"
                   ><p class="text-center text-grey">
@@ -219,6 +206,7 @@
 </template>
 <script>
 import { api } from "@/data.js";
+import Alert from "@/assets/js/submitAlert.js";
 
 export default {
   name: "AccountWindow",
@@ -251,6 +239,11 @@ export default {
     };
   },
   methods: {
+    submitAlert() {
+      Alert((close) => {
+        close();
+      });
+    },
     getCookie() {
       // let cookies = document.cookie.split("; ");
       // for (let i = 0; i < cookies.length; i++) {
