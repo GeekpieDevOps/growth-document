@@ -1,6 +1,5 @@
 import { createApp } from "vue";
 import { registerPlugins } from "@/plugins";
-import SubmitAlert from "@/components/public/SubmitAlert.vue";
 
 // import SubmitAlert from "@/components/public/SubmitAlert.vue";
 

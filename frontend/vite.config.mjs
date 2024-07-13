@@ -48,6 +48,7 @@ export default defineConfig({
         account: resolve(__dirname, "account.html"),
         settings: resolve(__dirname, "settings.html"),
         index: resolve(__dirname, "index.html"),
+        student: resolve(__dirname, "student.html"),
       },
     },
   },

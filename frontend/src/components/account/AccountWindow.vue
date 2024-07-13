@@ -206,7 +206,7 @@
 </template>
 <script>
 import { api } from "@/data.js";
-import Alert from "@/assets/js/submitAlert.js";
+import Alert from "@/assets/js/submitAlert.jsx";
 
 export default {
   name: "AccountWindow",
