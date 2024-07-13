@@ -1,16 +1,17 @@
-const host = "http://localhost:3000";
+const host = "http://127.0.0.1:4523/m1/4078973-0-default";
 const path = {
-  signup: "/signup",
-  login: "/login",
-  logout: "/logout",
-  account: "/account",
-  settings: "/settings",
+  signup: host + "/signup",
+  login: host + "/login",
+  logout: host + "/logout",
+  account: host + "/account",
+  settings: host + "/settings",
 };
 const api = {
-  signup: "/api/v1/user/sign_up",
-  login: "/api/v1/user/sign_in",
-  signout: (uuid) => `/api/v1/user/${uuid}/sign_out`,
-  account: (uuid) => `/api/v1/user/${uuid}`,
+  signup: host + "/api/v1/user/sign_up",
+  login: host + "/api/v1/user/sign_in",
+  studentActivities: host + "/api/v1/student/activities",
+  signout: (uuid) => host + `/api/v1/user/${uuid}/sign_out`,
+  account: (uuid) => host + `/api/v1/user/${uuid}`,
 };
 
 export { host, path, api };

@@ -22,29 +22,44 @@
   </v-app>
 </template> -->
 
-
-
 <template>
-  <v-app style="background-color:#CFD8DC;">
+  <v-app style="background-color: #cfd8dc">
     <v-main>
       <!-- Navigation -->
       <LoginNav :tab="0" />
       <!-- Contents -->
-      
-      <v-row class="rounded rounded-md pa-0" style="height:90vh;">
 
-        <v-col cols="6" cols-sm="12" class="d-none d-lg-flex align-center justify-center ma-2" style="min-height: 300px;
-        background-image: url('../../../public/imgs/IMG_0638-已增强-NR33.jpg');background-size: cover;background-position: center;
-        box-shadow: inset 0px 0px 20px 10px rgba(0,0,0,0.6);border-radius: 10px;">
-
-            <div style="position: absolute;bottom: 20px;width:60%;display: flex;justify-content: space-around;">
-              <LogoShow />
-            </div>          
-
+      <v-row class="rounded rounded-md pa-0" style="height: 90vh">
+        <v-col
+          cols="6"
+          cols-sm="12"
+          class="d-none d-lg-flex align-center justify-center ma-2"
+          style="
+            min-height: 300px;
+            background-image: url('../../../public/imgs/IMG_0638-已增强-NR33.jpg');
+            background-size: cover;
+            background-position: center;
+            box-shadow: inset 0px 0px 20px 10px rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+          "
+        >
+          <div
+            style="
+              position: absolute;
+              bottom: 20px;
+              width: 60%;
+              display: flex;
+              justify-content: space-around;
+            "
+          >
+            <LogoShow />
+          </div>
         </v-col>
 
-        <v-col class="d-flex align-center justify-center pa-0" style="min-height: 300px;">
-          
+        <v-col
+          class="d-flex align-center justify-center pa-0"
+          style="min-height: 300px"
+        >
           <!-- <v-card v-bind="props" class="elevation-12 mx-auto pa-6" width="500px" style="border:1px solid black;">
                 <v-card-title tag="h2">
                   <h2>欢迎来到综合素质培养平台</h2> 
@@ -79,12 +94,9 @@
               </v-card-actions>
             </v-card> -->
 
-            <LoginCard />
-
+          <LoginCard />
         </v-col>
-
       </v-row>
-
     </v-main>
   </v-app>
 </template>
@@ -116,8 +128,7 @@ export default {
   },
 };
 </script> -->
-  
 
 <script setup>
-import LoginCard from '@/components/LoginCard.vue';
+import LoginCard from "@/components/login/LoginCard.vue";
 </script>
