@@ -23,7 +23,7 @@ declare module 'vue' {
     SignupCard: typeof import('./src/components/signup/SignupCard.vue')['default']
     StudentActivitiesContainer: typeof import('./src/components/student/activities/StudentActivitiesContainer.vue')['default']
     StudentActivitiesShow: typeof import('./src/components/student/activities/StudentActivitiesShow.vue')['default']
-    SubmitAlert: typeof import('./src/components/public/SubmitAlert.vue')['default']
+    SubmitAlert: typeof import("./src/assets/js/SubmitAlert.vue")["default"]
     Sylogo: typeof import('./src/components/sylogo.vue')['default']
   }
 }

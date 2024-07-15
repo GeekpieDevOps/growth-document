@@ -206,7 +206,7 @@
 </template>
 <script>
 import { api } from "@/data.js";
-import Alert from "@/assets/js/submitAlert.jsx";
+import notify from "@/assets/js/notify.js";
 
 export default {
   name: "AccountWindow",
@@ -240,9 +240,7 @@ export default {
   },
   methods: {
     submitAlert() {
-      Alert((close) => {
-        close();
-      });
+      notify("alert", "确认提交吗，提交后不能撤销", () => {});
     },
     getCookie() {
       // let cookies = document.cookie.split("; ");
@@ -308,7 +306,7 @@ export default {
         this.getAccountInfo = data.data;
         this.$nextTick(() => {
           this.userInfoFormRest();
-        }, 0);
+        });
       });
   },
 };
