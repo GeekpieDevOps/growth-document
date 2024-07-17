@@ -26,5 +26,6 @@ declare module 'vue' {
     Sylogo: typeof import('./src/components/sylogo.vue')['default']
     UserBar: typeof import('./src/components/public/UserBar.vue')['default']
     UserBarContainer: typeof import("./src/components/public/UserBar.vue")["default"]
+    UserFormShow: typeof import('./src/components/public/UserFormShow.vue')['default']
   }
 }

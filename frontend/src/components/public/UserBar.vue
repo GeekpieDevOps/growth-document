@@ -1,26 +1,21 @@
 <template>
-  <v-container class="d-flex justify-center align-center">
-    <v-app-bar
-      :collapse="isCollapse"
-      @mouseenter="ChangeCollapse(false)"
-      @mouseleave="ChangeCollapse(true)"
-      :class="{ 'userbar-v-app-bar': !isCollapse }"
-    >
-      <template v-slot:prepend
-        ><v-icon class="ml-3">mdi-menu</v-icon>
-      </template>
-      <v-app-bar-title>
-        <v-btn
-          v-for="item of contents"
-          variant="text"
-          :href="item.link"
-          class="text-h6"
-          >{{ item.title }}</v-btn
-        >
-      </v-app-bar-title>
-    </v-app-bar>
-    <v-img src="../../../public/imgs/物质塔.jpg" :max-width="400"></v-img>
-  </v-container>
+  <v-app-bar
+    :collapse="isCollapse"
+    @mouseenter="ChangeCollapse(false)"
+    @mouseleave="ChangeCollapse(true)"
+    :class="{ 'userbar-v-app-bar': !isCollapse }"
+  >
+    <template v-slot:prepend><v-icon class="ml-3">mdi-menu</v-icon> </template>
+    <v-app-bar-title>
+      <v-btn
+        v-for="item of contents"
+        variant="text"
+        :href="item.link"
+        class="text-h7"
+        >{{ item.title }}</v-btn
+      >
+    </v-app-bar-title>
+  </v-app-bar>
 </template>
 
 <script>
