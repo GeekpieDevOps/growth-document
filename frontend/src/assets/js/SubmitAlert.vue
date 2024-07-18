@@ -9,7 +9,7 @@
       <template v-slot:default>
         <v-card variant="flat">
           <v-card-title :class="`text-${styleOptions.titleColor}`">
-            {{ styleOptions.titleMsg }}
+            <v-icon>{{ styleOptions.icon }}</v-icon> {{ styleOptions.titleMsg }}
           </v-card-title>
           <v-card-text> {{ msg }} </v-card-text>
           <v-card-actions>

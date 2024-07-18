@@ -2,7 +2,12 @@
   <v-sheet
     class="ma-0 pa-0 h-screen d-flex justify-center align-center userFormShow-v-sheet"
   >
-    <v-card title="欢迎来到书院综合素质平台" variant="text" width="500px">
+    <v-card
+      title="欢迎来到书院综合素质平台"
+      variant="text"
+      width="500px"
+      :loading="isLoading"
+    >
       <v-card-text class="mt-5">
         <v-row class="mb-4">
           <v-col>
@@ -20,13 +25,14 @@
           </v-col>
         </v-row>
         <v-row class="mb-6"> <v-divider></v-divider></v-row>
-        <v-form @submit.prevent="$emit('submit')">
+        <v-form @submit.prevent="sub" ref="form">
           <v-row class="mb-3">
             <v-text-field
               label="邮箱"
               type="email"
               variant="outlined"
               :rules="rules.email"
+              v-model="email"
             ></v-text-field> </v-row
           ><v-row class="mb-3">
             <v-text-field
@@ -34,6 +40,7 @@
               type="password"
               variant="outlined"
               :rules="rules.password"
+              v-model="password"
             ></v-text-field
           ></v-row>
           <v-row>
@@ -55,6 +62,12 @@
 <script>
 export default {
   name: "UserFormShow",
+  props: {
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       rules: {
@@ -64,7 +77,22 @@ export default {
         ],
         password: [(v) => !!v || "密码不能为空"],
       },
+      email: "",
+      password: "",
     };
+  },
+  methods: {
+    sub() {
+      // @ts-ignore
+      this.$refs.form.validate().then(({ valid }) => {
+        if (!valid) return;
+
+        this.$emit("sub", {
+          email: this.email,
+          password: this.password,
+        });
+      });
+    },
   },
 };
 </script>
