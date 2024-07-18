@@ -11,6 +11,7 @@ declare module 'vue' {
     Alert: typeof import('./src/components/Alert.vue')['default']
     IndexNav: typeof import('./src/components/IndexNav.vue')['default']
     LoginCard: typeof import('./src/components/login/LoginCard.vue')['default']
+    LoginFormContainer: typeof import('./src/components/login/LoginFormContainer.vue')['default']
     LoginNav: typeof import('./src/components/login/LoginNav.vue')['default']
     LogoShow: typeof import('./src/components/login/LogoShow.vue')['default']
     MemberCard: typeof import('./src/components/MemberCard.vue')['default']
@@ -24,5 +25,8 @@ declare module 'vue' {
     StudentActivitiesContainer: typeof import('./src/components/student/activities/StudentActivitiesContainer.vue')['default']
     StudentActivitiesShow: typeof import('./src/components/student/activities/StudentActivitiesShow.vue')['default']
     Sylogo: typeof import('./src/components/sylogo.vue')['default']
+    UserBar: typeof import('./src/components/public/UserBar.vue')['default']
+    UserBarContainer: typeof import("./src/components/public/UserBar.vue")["default"]
+    UserFormShow: typeof import('./src/components/public/UserFormShow.vue')['default']
   }
 }
