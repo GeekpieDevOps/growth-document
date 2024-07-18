@@ -1,10 +1,5 @@
 <template>
-  <v-app-bar
-    :collapse="isCollapse"
-    @mouseenter="ChangeCollapse(false)"
-    @mouseleave="ChangeCollapse(true)"
-    :class="{ 'userbar-v-app-bar': !isCollapse }"
-  >
+  <v-app-bar class="userbar-v-app-bar">
     <template v-slot:prepend><v-icon class="ml-3">mdi-menu</v-icon> </template>
     <v-app-bar-title>
       <v-btn
@@ -12,6 +7,7 @@
         variant="text"
         :href="item.link"
         class="text-h7"
+        :color="item.title === strong ? 'primary' : ''"
         >{{ item.title }}</v-btn
       >
     </v-app-bar-title>
@@ -21,9 +17,11 @@
 <script>
 export default {
   name: "UserBar",
+  props: {
+    strong: { type: String },
+  },
   data() {
     return {
-      isCollapse: true,
       contents: [
         { title: "主页", link: "/" },
         { title: "书院", link: "https://life.shanghaitech.edu.cn/" },
@@ -31,11 +29,6 @@ export default {
         { title: "注册", link: "/signup" },
       ],
     };
-  },
-  methods: {
-    ChangeCollapse(value) {
-      this.isCollapse = value;
-    },
   },
 };
 </script>

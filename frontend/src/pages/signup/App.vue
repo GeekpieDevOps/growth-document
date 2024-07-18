@@ -1,29 +1,41 @@
 <template>
-  <v-app class="bg-blue-lighten-2">
-    <v-main>
-      <LoginNav :tab="1" />
-      <v-container
-        fluid
-        fill-height
-        style="width: 100vw; height: 100vh"
-        class="d-flex flex-column pa-1 pa-sm-10 justify-center"
-      >
-        <v-spacer></v-spacer>
-        <v-row>
-          <v-col cols="0" sm="2" md="3"></v-col>
-          <v-col cols="12" sm="8" md="6"> <SignupCard /></v-col>
-          <v-col cols="0" sm="2" md="3"></v-col
-        ></v-row>
-        <v-row class="d-flex justify-space-around align-center pt-5">
-          <LogoShow />
-        </v-row>
-      </v-container>
-    </v-main>
+  <v-app>
+    <v-main class="ma-0 pa-0">
+      <UserBar strong="注册" />
+      <v-row
+        class="ma-0 d-flex justify-center align-center pa-0"
+        :style="{
+          width: '100vw',
+          height: '100vh',
+        }"
+        ><v-col
+          cols="12"
+          md="7"
+          class="bg-indigo-lighten-5 d-none d-md-block h-screen pa-0 ma-0"
+        >
+          <v-container
+            class="d-flex justify-center align-center"
+            style="height: 100vh"
+          >
+            <v-img
+              src="../../../public/imgs/物质塔.jpg"
+              :max-width="400"
+            ></v-img> </v-container></v-col
+        ><v-col cols="12" md="5" class="pa-0">
+          <SignupFormContainer /> </v-col></v-row
+    ></v-main>
   </v-app>
 </template>
 
-<script setup>
-import LoginNav from "@/components/login/LoginNav.vue";
+<script>
+import UserBar from "@/components/public/UserBar.vue";
+import SignupFormContainer from "@/components/signup/SignupFormContainer.vue";
 
-//
+export default {
+  name: "App",
+  components: {
+    UserBar,
+    SignupFormContainer,
+  },
+};
 </script>

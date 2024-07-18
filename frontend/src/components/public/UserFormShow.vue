@@ -2,14 +2,12 @@
   <v-sheet
     class="ma-0 pa-0 h-screen d-flex justify-center align-center userFormShow-v-sheet"
   >
-    <v-card
-      title="欢迎来到书院综合素质平台"
-      variant="text"
-      width="500px"
-      :loading="isLoading"
-    >
-      <v-card-text class="mt-5">
-        <v-row class="mb-4">
+    <v-card variant="text" width="500px" :loading="isLoading">
+      <v-card-title class="font-weight-bold"
+        >欢迎来到书院综合素质平台</v-card-title
+      >
+      <v-card-text class="mt-7">
+        <v-row class="mb-6">
           <v-col>
             <v-btn
               variant="outlined"
@@ -24,9 +22,9 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-row class="mb-6"> <v-divider></v-divider></v-row>
-        <v-form @submit.prevent="sub" ref="form">
-          <v-row class="mb-3">
+        <v-row class="mb-16"> <v-divider></v-divider></v-row>
+        <v-form @submit.prevent="sub" ref="form" class="mb-10">
+          <v-row class="mb-4">
             <v-text-field
               label="邮箱"
               type="email"
@@ -34,7 +32,7 @@
               :rules="rules.email"
               v-model="email"
             ></v-text-field> </v-row
-          ><v-row class="mb-3">
+          ><v-row class="mb-4">
             <v-text-field
               label="密码"
               type="password"
@@ -50,13 +48,16 @@
               color="info"
               type="submit"
               height="50px"
-              >登录</v-btn
+              size="large"
+              >{{ btnText }}</v-btn
             >
           </v-row>
-        </v-form></v-card-text
-      >
-    </v-card></v-sheet
-  >
+        </v-form>
+        <v-row>
+          <slot name="information"></slot>
+        </v-row>
+      </v-card-text> </v-card
+  ></v-sheet>
 </template>
 
 <script>
@@ -66,6 +67,10 @@ export default {
     isLoading: {
       type: Boolean,
       default: false,
+    },
+    btnText: {
+      type: String,
+      required: true,
     },
   },
   data() {
