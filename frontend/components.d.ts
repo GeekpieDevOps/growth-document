@@ -11,6 +11,7 @@ declare module 'vue' {
     Alert: typeof import('./src/components/Alert.vue')['default']
     IndexNav: typeof import('./src/components/IndexNav.vue')['default']
     LoginCard: typeof import('./src/components/login/LoginCard.vue')['default']
+    LoginFormContainer: typeof import('./src/components/login/LoginFormContainer.vue')['default']
     LoginNav: typeof import('./src/components/login/LoginNav.vue')['default']
     LogoShow: typeof import('./src/components/login/LogoShow.vue')['default']
     MemberCard: typeof import('./src/components/MemberCard.vue')['default']
