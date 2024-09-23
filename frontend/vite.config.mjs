@@ -49,6 +49,7 @@ export default defineConfig({
         settings: resolve(__dirname, "settings.html"),
         index: resolve(__dirname, "index.html"),
         student: resolve(__dirname, "student.html"),
+        teacher: resolve(__dirname, "teacher.html"),
       },
     },
   },
