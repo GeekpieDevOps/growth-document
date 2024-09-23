@@ -1,5 +1,5 @@
 <template>
-  <TeacherUnscoredShow :activities="activities" />
+  <TeacherUnscoredShow :activities="activities" @submit="submit" />
 </template>
 
 <script>
@@ -24,6 +24,11 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    submit() {
+      console.log("submit");
+    },
   },
 };
 </script>

@@ -39,20 +39,29 @@
               <v-card>
                 <v-card-title>能力维度</v-card-title>
                 <v-card-text>
-                  <v-table>
-                    <tbody>
-                      <tr v-for="skill of activity.skills">
-                        <td>{{ skill }}</td>
-                        <td>
-                          <v-form>
-                            <v-text-field variant="outlined"></v-text-field
-                          ></v-form>
-                        </td>
-                      </tr>
-                    </tbody> </v-table
+                  <v-list>
+                    <v-list-item v-for="skill of activity.skills"
+                      ><v-form>
+                        <v-text-field
+                          :label="skill"
+                          variant="underlined"
+                        ></v-text-field
+                      ></v-form>
+                    </v-list-item> </v-list
                 ></v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
+                  <v-btn
+                    @click="
+                      () => {
+                        isActive.value = false;
+                        $emit('submit');
+                      }
+                    "
+                    color="warning"
+                    variant="tonal"
+                    >提交</v-btn
+                  >
                   <v-btn
                     @click="isActive.value = false"
                     color="info"

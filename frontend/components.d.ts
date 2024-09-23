@@ -22,6 +22,7 @@ declare module 'vue' {
     PictureCard: typeof import('./src/components/PictureCard.vue')['default']
     PictureRoll: typeof import('./src/components/PictureRoll.vue')['default']
     SignupCard: typeof import('./src/components/signup/SignupCard.vue')['default']
+    SignupFormContainer: typeof import('./src/components/signup/SignupFormContainer.vue')['default']
     StudentActivitiesContainer: typeof import('./src/components/student/activities/StudentActivitiesContainer.vue')['default']
     StudentActivitiesShow: typeof import('./src/components/student/activities/StudentActivitiesShow.vue')['default']
     Sylogo: typeof import('./src/components/sylogo.vue')['default']
