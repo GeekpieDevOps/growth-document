@@ -25,8 +25,9 @@ declare module 'vue' {
     StudentActivitiesContainer: typeof import('./src/components/student/activities/StudentActivitiesContainer.vue')['default']
     StudentActivitiesShow: typeof import('./src/components/student/activities/StudentActivitiesShow.vue')['default']
     Sylogo: typeof import('./src/components/sylogo.vue')['default']
+    TeacherGradedContainer: typeof import('./src/components/teacher/graded/TeacherGradedContainer.vue')['default']
+    TeacherGradedShow: typeof import('./src/components/teacher/graded/TeacherGradedShow.vue')['default']
     UserBar: typeof import('./src/components/public/UserBar.vue')['default']
-    UserBarContainer: typeof import("./src/components/public/UserBar.vue")["default"]
     UserFormShow: typeof import('./src/components/public/UserFormShow.vue')['default']
   }
 }
