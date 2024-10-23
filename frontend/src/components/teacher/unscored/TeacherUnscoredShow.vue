@@ -16,10 +16,10 @@
     <tbody>
       <tr
         v-for="activity of activities"
-        :key="activity.student_name + activity.activity_name"
+        :key="activity.student.name + activity.activity.name"
       >
-        <td>{{ activity.student_name }}</td>
-        <td>{{ activity.activity_name }}</td>
+        <td>{{ activity.student.name }}</td>
+        <td>{{ activity.activity.name }}</td>
         <td class="d-none d-md-table-cell">
           <v-chip
             v-for="skill of activity.skills"
@@ -30,6 +30,7 @@
           >
         </td>
         <td>
+          <!-- grade dialog -->
           <v-dialog max-width="500">
             <template v-slot:activator="{ props: activatorProps }">
               <v-btn v-bind="activatorProps" color="info">打分</v-btn></template
@@ -40,7 +41,7 @@
                 <v-card-title>能力维度</v-card-title>
                 <v-card-text>
                   <v-list>
-                    <v-list-item v-for="skill of activity.skills"
+                    <v-list-item v-for="skill of activity.skills" :key="skill"
                       ><v-form>
                         <v-text-field
                           :label="skill"

@@ -13,13 +13,13 @@ export default {
     return {
       activities: [
         {
-          student_name: "Anna",
-          activity_name: "xx摄影比赛",
+          student: { name: "Anna", uuid: "6523" },
+          activity: { name: "xx摄影比赛", uuid: "1132" },
           skills: ["能力1", "能力2"],
         },
         {
-          student_name: "Jane",
-          activity_name: "xx摄影比赛",
+          student: { name: "John", uuid: "652123" },
+          activity: { name: "xx摄影比赛", uuid: "1132" },
           skills: ["能力1", "能力2"],
         },
       ],
